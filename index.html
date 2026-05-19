@@ -18,35 +18,49 @@
     <!-- Screen 0: Profile Selection -->
     <section class="screen active" id="s0">
       <div class="sc profiles-sc">
-        <div class="hdr">
-          <div class="profiles-icon">
-            <svg viewBox="0 0 48 48" fill="none" width="44" height="44">
-              <circle cx="24" cy="18" r="10" stroke="url(#pg)" stroke-width="2"/>
-              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="url(#pg)" stroke-width="2" stroke-linecap="round"/>
-              <defs><linearGradient id="pg" x1="4" y1="4" x2="44" y2="44"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
-            </svg>
-          </div>
-          <h2>Select Profile</h2>
-          <p>Tap a patient profile to begin</p>
+        <div class="app-logo">
+          <svg viewBox="0 0 48 48" width="40" height="40" fill="none">
+            <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#logo-g)" opacity=".15"/>
+            <path d="M10 24h6l3-8 4 16 4-12 3 4h8" stroke="url(#logo-g)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="logo-g" x1="4" y1="4" x2="44" y2="44"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+          </svg>
         </div>
-        <div class="profile-grid" id="profile-grid">
-          <!-- Profiles injected by JS -->
-        </div>
+        <h2 class="profiles-title">Select Profile</h2>
+        <div class="profile-grid" id="profile-grid"></div>
       </div>
     </section>
 
-    <!-- Screen 1: Welcome -->
+    <!-- Profile Detail Overlay -->
+    <div class="profile-overlay" id="profile-overlay">
+      <div class="profile-detail" id="profile-detail">
+        <img class="pd-photo" id="pd-photo" src="" alt="Profile"/>
+        <h2 class="pd-welcome" id="pd-welcome">Welcome back!</h2>
+        <p class="pd-quote" id="pd-quote"></p>
+        <div class="pd-history" id="pd-history">
+          <div class="pd-stat"><span class="pd-stat-val" id="pd-sessions">0</span><span class="pd-stat-lbl">Sessions</span></div>
+          <div class="pd-stat"><span class="pd-stat-val" id="pd-last-area">—</span><span class="pd-stat-lbl">Last Area</span></div>
+          <div class="pd-stat"><span class="pd-stat-val" id="pd-last-int">—</span><span class="pd-stat-lbl">Last Level</span></div>
+        </div>
+        <div class="pd-btn" id="pd-start">Get Started</div>
+      </div>
+    </div>
+
+    <!-- Screen 1: Precautions -->
     <section class="screen" id="s1">
-      <div class="sc welcome" id="welcome-tap" role="button" tabindex="0">
-        <div class="pulse-ring"><div class="pulse-inner">
-          <svg viewBox="0 0 48 48" fill="none" width="48" height="48"><circle cx="24" cy="24" r="20" stroke="url(#g1)" stroke-width="2"/><path d="M24 14v10l7 4" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="g1" x1="4" y1="4" x2="44" y2="44"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs></svg>
-        </div></div>
-        <h1>Pain Intensity<br/><span>Tracker</span></h1>
-        <p class="profile-welcome" id="profile-welcome">Welcome back</p>
-        <p class="sub">Track your pain and start your recovery session.</p>
-        <div class="tap-hint">
-          <div class="tap-ring"></div>
-          <span>Tap anywhere to continue</span>
+      <div class="sc">
+        <div class="hdr"><span class="badge">Before You Begin</span><h2>Safety Precautions</h2></div>
+        <div class="precaution-list" id="precaution-list">
+          <div class="prec-item"><span class="prec-icon">🧴</span><span>Ensure treatment area is clean and dry</span></div>
+          <div class="prec-item"><span class="prec-icon">🩹</span><span>Do not use on broken or irritated skin</span></div>
+          <div class="prec-item"><span class="prec-icon">💍</span><span>Remove metallic jewelry near the area</span></div>
+          <div class="prec-item"><span class="prec-icon">🫀</span><span>Consult physician if you have a pacemaker</span></div>
+          <div class="prec-item"><span class="prec-icon">🛑</span><span>Use Emergency Stop if discomfort occurs</span></div>
+        </div>
+        <div class="continue-bar">
+          <div class="continue-btn" id="prec-continue">
+            <span>I Understand — Continue</span>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
         </div>
       </div>
     </section>
@@ -54,150 +68,57 @@
     <!-- Screen 2: Body Map -->
     <section class="screen" id="s2">
       <div class="sc bodymap-sc">
-        <div class="hdr"><span class="badge">Step 1 / 3</span><h2>Select Pain Area</h2><p>Tap on the body to select the pain area</p></div>
-
-        <!-- Front / Back Toggle -->
+        <div class="hdr"><span class="badge">Step 1 / 3</span><h2>Select Pain Area</h2><p>Tap on the body to mark your pain</p></div>
         <div class="view-toggle">
           <div class="vtab active" id="vtab-front" data-view="front">Front</div>
           <div class="vtab" id="vtab-back" data-view="back">Back</div>
         </div>
-
-        <!-- Body Map + Zoom side-by-side -->
         <div class="bodymap-layout">
-          <!-- Body Map Container -->
           <div class="bodymap-container">
-            <!-- FRONT VIEW -->
             <div class="bodymap-view" id="bodymap-front">
-              <svg viewBox="0 0 200 420" class="body-svg" id="body-svg-front">
-                <!-- Body outline - Front -->
-                <g class="body-outline" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none">
-                  <ellipse cx="100" cy="32" rx="22" ry="28"/>
-                  <rect x="90" y="58" width="20" height="14" rx="4"/>
-                  <path d="M68 72 Q60 72 58 80 L52 150 Q50 165 60 172 L80 178 Q100 182 120 178 L140 172 Q150 165 148 150 L142 80 Q140 72 132 72 Z"/>
-                  <path d="M58 80 Q42 82 36 100 L26 155 Q24 165 28 170 L36 172 Q40 168 38 158 L48 105 Q50 95 54 88"/>
-                  <path d="M142 80 Q158 82 164 100 L174 155 Q176 165 172 170 L164 172 Q160 168 162 158 L152 105 Q150 95 146 88"/>
-                  <path d="M78 178 Q72 195 70 230 L66 310 Q64 340 68 360 L72 390 Q74 400 80 400 L86 398 Q88 395 86 385 L82 360 Q80 340 82 310 L86 230 Q88 210 92 195"/>
-                  <path d="M122 178 Q128 195 130 230 L134 310 Q136 340 132 360 L128 390 Q126 400 120 400 L114 398 Q112 395 114 385 L118 360 Q120 340 118 310 L114 230 Q112 210 108 195"/>
-                </g>
-                <!-- Clickable zones - Front -->
-                <g class="body-zones" id="zones-front">
-                  <ellipse class="bzone" data-zone="Head" cx="100" cy="32" rx="20" ry="26"/>
-                  <rect class="bzone" data-zone="Neck" x="88" y="56" width="24" height="16" rx="6"/>
-                  <rect class="bzone" data-zone="Left Shoulder" x="54" y="72" width="26" height="22" rx="6"/>
-                  <rect class="bzone" data-zone="Right Shoulder" x="120" y="72" width="26" height="22" rx="6"/>
-                  <rect class="bzone" data-zone="Chest" x="72" y="80" width="56" height="36" rx="8"/>
-                  <rect class="bzone" data-zone="Abdomen" x="72" y="120" width="56" height="40" rx="8"/>
-                  <rect class="bzone" data-zone="Left Upper Arm" x="30" y="95" width="22" height="45" rx="8"/>
-                  <rect class="bzone" data-zone="Right Upper Arm" x="148" y="95" width="22" height="45" rx="8"/>
-                  <rect class="bzone" data-zone="Left Forearm" x="24" y="142" width="20" height="35" rx="8"/>
-                  <rect class="bzone" data-zone="Right Forearm" x="156" y="142" width="20" height="35" rx="8"/>
-                  <rect class="bzone" data-zone="Hip" x="68" y="162" width="64" height="22" rx="8"/>
-                  <rect class="bzone" data-zone="Left Thigh" x="66" y="190" width="28" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Right Thigh" x="106" y="190" width="28" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Left Knee" x="66" y="250" width="24" height="30" rx="8"/>
-                  <rect class="bzone" data-zone="Right Knee" x="110" y="250" width="24" height="30" rx="8"/>
-                  <rect class="bzone" data-zone="Left Shin" x="64" y="285" width="22" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Right Shin" x="114" y="285" width="22" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Left Foot" x="64" y="345" width="24" height="20" rx="6"/>
-                  <rect class="bzone" data-zone="Right Foot" x="112" y="345" width="24" height="20" rx="6"/>
-                </g>
-              </svg>
+              <svg viewBox="0 0 200 420" class="body-svg" id="body-svg-front"></svg>
             </div>
-
-            <!-- BACK VIEW -->
             <div class="bodymap-view hidden" id="bodymap-back">
-              <svg viewBox="0 0 200 420" class="body-svg" id="body-svg-back">
-                <g class="body-outline" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none">
-                  <ellipse cx="100" cy="32" rx="22" ry="28"/>
-                  <rect x="90" y="58" width="20" height="14" rx="4"/>
-                  <path d="M68 72 Q60 72 58 80 L52 150 Q50 165 60 172 L80 178 Q100 182 120 178 L140 172 Q150 165 148 150 L142 80 Q140 72 132 72 Z"/>
-                  <path d="M58 80 Q42 82 36 100 L26 155 Q24 165 28 170 L36 172 Q40 168 38 158 L48 105 Q50 95 54 88"/>
-                  <path d="M142 80 Q158 82 164 100 L174 155 Q176 165 172 170 L164 172 Q160 168 162 158 L152 105 Q150 95 146 88"/>
-                  <path d="M78 178 Q72 195 70 230 L66 310 Q64 340 68 360 L72 390 Q74 400 80 400 L86 398 Q88 395 86 385 L82 360 Q80 340 82 310 L86 230 Q88 210 92 195"/>
-                  <path d="M122 178 Q128 195 130 230 L134 310 Q136 340 132 360 L128 390 Q126 400 120 400 L114 398 Q112 395 114 385 L118 360 Q120 340 118 310 L114 230 Q112 210 108 195"/>
-                </g>
-                <g class="body-zones" id="zones-back">
-                  <ellipse class="bzone" data-zone="Head (Back)" cx="100" cy="32" rx="20" ry="26"/>
-                  <rect class="bzone" data-zone="Neck (Back)" x="88" y="56" width="24" height="16" rx="6"/>
-                  <rect class="bzone" data-zone="Left Shoulder (Back)" x="54" y="72" width="26" height="22" rx="6"/>
-                  <rect class="bzone" data-zone="Right Shoulder (Back)" x="120" y="72" width="26" height="22" rx="6"/>
-                  <rect class="bzone" data-zone="Upper Back" x="72" y="80" width="56" height="36" rx="8"/>
-                  <rect class="bzone" data-zone="Lower Back" x="72" y="120" width="56" height="40" rx="8"/>
-                  <rect class="bzone" data-zone="Left Upper Arm (Back)" x="30" y="95" width="22" height="45" rx="8"/>
-                  <rect class="bzone" data-zone="Right Upper Arm (Back)" x="148" y="95" width="22" height="45" rx="8"/>
-                  <rect class="bzone" data-zone="Left Elbow" x="24" y="135" width="20" height="22" rx="8"/>
-                  <rect class="bzone" data-zone="Right Elbow" x="156" y="135" width="20" height="22" rx="8"/>
-                  <rect class="bzone" data-zone="Glutes" x="68" y="162" width="64" height="22" rx="8"/>
-                  <rect class="bzone" data-zone="Left Hamstring" x="66" y="190" width="28" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Right Hamstring" x="106" y="190" width="28" height="55" rx="8"/>
-                  <rect class="bzone" data-zone="Left Calf" x="64" y="270" width="22" height="65" rx="8"/>
-                  <rect class="bzone" data-zone="Right Calf" x="114" y="270" width="22" height="65" rx="8"/>
-                  <rect class="bzone" data-zone="Left Achilles" x="66" y="340" width="20" height="24" rx="6"/>
-                  <rect class="bzone" data-zone="Right Achilles" x="114" y="340" width="20" height="24" rx="6"/>
-                </g>
-              </svg>
+              <svg viewBox="0 0 200 420" class="body-svg" id="body-svg-back"></svg>
             </div>
           </div>
-
-          <!-- Zoom Panel -->
           <div class="zoom-panel" id="zoom-panel">
             <div class="zoom-label">Zoomed View</div>
-            <div class="zoom-viewport" id="zoom-viewport">
-              <svg viewBox="0 0 120 120" class="zoom-svg" id="zoom-svg">
-                <!-- Cloned and zoomed zone will be drawn here -->
-              </svg>
-            </div>
-            <div class="zone-info" id="zone-info">
-              <div class="zone-name" id="zone-name">Tap a body area</div>
-              <div class="zone-size-indicator" id="zone-size-wrap" style="display:none">
-                <span class="zone-size-label">Pain area size:</span>
-                <div class="zone-size-dots" id="zone-size-dots">
-                  <span class="zdot" data-size="1"></span><span class="zdot" data-size="2"></span><span class="zdot" data-size="3"></span><span class="zdot" data-size="4"></span><span class="zdot" data-size="5"></span>
-                </div>
+            <div class="zoom-viewport"><svg viewBox="0 0 120 120" class="zoom-svg" id="zoom-svg"></svg></div>
+            <div class="zone-name" id="zone-name">Tap a body area</div>
+            <div class="size-selector hidden" id="size-selector">
+              <span class="size-label">Pain Area:</span>
+              <div class="size-btns">
+                <div class="size-btn active" data-size="1">S</div>
+                <div class="size-btn" data-size="2">M</div>
+                <div class="size-btn" data-size="3">L</div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Continue button (appears after selection) -->
         <div class="continue-bar hidden" id="bodymap-continue">
-          <div class="continue-btn" id="bodymap-continue-btn">
-            <span>Continue</span>
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          </div>
+          <div class="continue-btn" id="bodymap-continue-btn"><span>Continue</span><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
         </div>
-
-        <!-- Swipe hint -->
-        <div class="swipe-hint">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Swipe right to go back</span>
-        </div>
+        <div class="swipe-hint"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Swipe right to go back</span></div>
       </div>
     </section>
 
     <!-- Screen 3: Pain Intensity -->
     <section class="screen" id="s3">
-      <div class="sc">
-        <div class="hdr"><span class="badge">Step 2 / 3</span><h2>Pain Intensity</h2><p>Drag the slider to set your pain level.</p></div>
-        <div class="idisplay"><div class="ival" id="ival">0</div><div class="ilbl" id="ilbl">No Pain</div><div class="iemoji" id="iemoji">😊</div></div>
-        <div class="sldwrap"><input type="range" min="0" max="10" value="0" class="sld" id="sld"/><div class="sldlbls"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div></div>
-        <div class="continue-bar" id="intensity-continue">
-          <div class="continue-btn" id="intensity-continue-btn">
-            <span>Continue</span>
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          </div>
-        </div>
-        <div class="swipe-hint">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Swipe right to go back</span>
-        </div>
+      <div class="sc intensity-sc" id="intensity-sc">
+        <div class="intensity-bg" id="intensity-bg"></div>
+        <div class="hdr" style="position:relative;z-index:1"><span class="badge">Step 2 / 3</span><h2>Pain Intensity</h2></div>
+        <div class="idisplay" style="position:relative;z-index:1"><div class="ival" id="ival">0</div><div class="ilbl" id="ilbl">No Pain</div></div>
+        <div class="sldwrap" style="position:relative;z-index:1"><input type="range" min="0" max="10" value="0" class="sld" id="sld"/><div class="sldlbls"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div></div>
+        <div class="continue-bar" style="position:relative;z-index:1"><div class="continue-btn" id="intensity-continue-btn"><span>Continue</span><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div></div>
+        <div class="swipe-hint" style="position:relative;z-index:1"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Swipe right to go back</span></div>
       </div>
     </section>
 
     <!-- Screen 4: Summary -->
     <section class="screen" id="s4">
       <div class="sc">
-        <div class="hdr"><span class="badge">Step 3 / 3</span><h2>Summary</h2><p>Review your pain assessment.</p></div>
+        <div class="hdr"><span class="badge">Step 3 / 3</span><h2>Summary</h2></div>
         <div class="sumcard glass">
           <div class="sumrow"><div class="sumico">📍</div><div><div class="sumlbl">Pain Area</div><div class="sumval" id="sa">—</div></div></div>
           <hr class="sumdiv"/>
@@ -205,75 +126,37 @@
           <hr class="sumdiv"/>
           <div class="sumrow"><div class="sumico">🔥</div><div><div class="sumlbl">Pain Intensity</div><div class="sumval" id="si">—</div></div></div>
           <hr class="sumdiv"/>
-          <div class="sumrow"><div class="sumico" id="se">😊</div><div><div class="sumlbl">Pain Level</div><div class="sumval" id="sl">—</div></div></div>
-          <hr class="sumdiv"/>
           <div class="sumrow"><div class="sumico">⏱️</div><div><div class="sumlbl">Session Duration</div><div class="sumval" id="sd">—</div></div></div>
         </div>
-        <div class="continue-bar">
-          <div class="continue-btn start-session-btn" id="summary-continue-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
-            <span>Start Session</span>
-          </div>
-        </div>
-        <div class="swipe-hint">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Swipe right to go back</span>
-        </div>
+        <div class="continue-bar"><div class="continue-btn start-session-btn" id="summary-continue-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg><span>Start Session</span></div></div>
+        <div class="swipe-hint"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Swipe right to go back</span></div>
       </div>
     </section>
 
     <!-- Screen 5: Timer + Electrodes -->
     <section class="screen" id="s5">
       <div class="sc">
-        <div class="hdr"><span class="badge tbadge">Session Active</span><h2>Recovery Session</h2><p id="timer-desc">Your session has started.</p></div>
-
-        <!-- Timer + Electrode Layout -->
+        <div class="hdr"><span class="badge tbadge">Session Active</span><h2>Recovery Session</h2><p id="timer-desc"></p></div>
         <div class="session-layout">
-          <!-- Timer Ring -->
           <div class="tring-wrap">
             <svg class="tring" viewBox="0 0 260 260"><defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><circle cx="130" cy="130" r="120" class="ttrack"/><circle cx="130" cy="130" r="120" class="tprog" id="tprog"/></svg>
             <div class="tcenter"><div class="ttime" id="ttime">20:00</div><div class="tsub">remaining</div></div>
           </div>
-
-          <!-- Electrode Placement Diagram -->
           <div class="electrode-section">
             <div class="electrode-title">Electrode Placement</div>
-            <div class="electrode-diagram" id="electrode-diagram">
-              <svg viewBox="0 0 200 200" class="electrode-svg" id="electrode-svg">
-                <!-- Pain zone circle -->
-                <circle cx="100" cy="100" r="30" class="pain-zone-circle" id="pain-zone-circle"/>
-                <text x="100" y="105" text-anchor="middle" class="pain-zone-text" id="pain-zone-text">Pain Area</text>
-                <!-- Electrodes will be placed dynamically by JS -->
-                <g id="electrodes-group"></g>
-              </svg>
-            </div>
-            <div class="electrode-legend">
-              <span class="eleg"><span class="eleg-dot ch-a"></span>Channel A (E1, E2)</span>
-              <span class="eleg"><span class="eleg-dot ch-b"></span>Channel B (E3, E4)</span>
-            </div>
-            <div class="electrode-area-label" id="electrode-area-label">Place around: —</div>
+            <div class="electrode-diagram"><svg viewBox="0 0 200 300" class="electrode-svg" id="electrode-svg"></svg></div>
+            <div class="electrode-area-label" id="electrode-area-label"></div>
           </div>
         </div>
-
-        <!-- Controls -->
         <div class="tctrl">
           <div class="btn icon" id="bpause">⏸</div>
           <div class="btn icon" id="breset">🔄</div>
         </div>
-
-        <!-- Emergency Stop -->
         <div class="btn estop" id="btn-estop">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
           <span>EMERGENCY STOP</span>
         </div>
-
-        <!-- Done (appears when timer completes) -->
-        <div class="continue-bar hidden" id="timer-done-bar">
-          <div class="continue-btn" id="timer-done-btn">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 12l4 4 6-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <span>Done — Return to Profiles</span>
-          </div>
-        </div>
+        <div class="continue-bar hidden" id="timer-done-bar"><div class="continue-btn" id="timer-done-btn"><span>Done — Return to Profiles</span></div></div>
       </div>
     </section>
   </div>
