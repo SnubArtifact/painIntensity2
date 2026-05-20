@@ -68,6 +68,22 @@ const femaleOutline = `
   <path class="body-outline" d="M128 192 C132 212, 134 242, 134 257 C134 272, 132 287, 132 302 C132 322, 131 342, 131 362 C131 369, 133 379, 133 382 C129 385, 121 382, 119 380 L119 367 C119 342, 115 312, 115 292 C115 267, 113 237, 113 217 L106 197 Z" />
 </g>` + internalLines;
 
+const lowerOutline = `
+<g class="body-group">
+  <!-- Left Thigh -->
+  <path class="body-outline" d="M74 10 C70 25, 68 50, 68 75 C68 90, 70 100, 70 110 L89 110 C89 100, 91 90, 91 75 C91 50, 89 25, 85 10 Z" />
+  <!-- Right Thigh -->
+  <path class="body-outline" d="M126 10 C130 25, 132 50, 132 75 C132 90, 130 100, 130 110 L111 110 C111 100, 109 90, 109 75 C109 50, 111 25, 115 10 Z" />
+  <!-- Left Calf -->
+  <path class="body-outline" d="M70 110 C68 130, 66 160, 66 185 C66 200, 68 210, 70 215 L89 215 C91 210, 93 200, 93 185 C93 160, 91 130, 89 110 Z" />
+  <!-- Right Calf -->
+  <path class="body-outline" d="M130 110 C132 130, 134 160, 134 185 C134 200, 132 210, 130 215 L111 215 C109 210, 107 200, 107 185 C107 160, 109 130, 111 110 Z" />
+  <!-- Left Foot -->
+  <path class="body-outline" d="M70 215 L89 215 C89 220, 85 235, 75 235 C65 235, 61 220, 70 215 Z" />
+  <!-- Right Foot -->
+  <path class="body-outline" d="M130 215 L111 215 C111 220, 115 235, 125 235 C135 235, 139 220, 130 215 Z" />
+</g>`;
+
 /* Body points as requested */
 const bodyPoints = {
   front: {
@@ -108,6 +124,16 @@ const bodyPoints = {
     'Right Calf': {cx: 125, cy: 325},
     'Left Foot': {cx: 75, cy: 380},
     'Right Foot': {cx: 125, cy: 380}
+  },
+  lower: {
+    'Left Thigh': {cx: 75, cy: 60},
+    'Right Thigh': {cx: 125, cy: 60},
+    'Left Knee': {cx: 75, cy: 115},
+    'Right Knee': {cx: 125, cy: 115},
+    'Left Calf': {cx: 75, cy: 165},
+    'Right Calf': {cx: 125, cy: 165},
+    'Left Foot': {cx: 75, cy: 220},
+    'Right Foot': {cx: 125, cy: 220}
   }
 };
 // Smaller uniform ring sizes for all areas
@@ -145,16 +171,46 @@ function openProfileDetail(p){
   document.getElementById('pd-sessions').textContent=p.sessions;
   document.getElementById('pd-last-area').textContent=p.lastArea;
   document.getElementById('pd-last-int').textContent=p.lastInt;
+  // Set previous session details
+  document.getElementById('ps-area').textContent=p.lastArea||'—';
+  document.getElementById('ps-intensity').textContent=p.lastInt||'—';
+  document.getElementById('ps-duration').textContent=p.lastArea!=='—' ? getTimerMinutes(parseInt(p.lastInt)||0)+' min' : '—';
   renderBothViews();
   // Delay navigation to ensure UI is ready
   setTimeout(() => go(2), 0);
 }
 
+function goToScreen(screenId){
+  const screens=document.querySelectorAll('.screen');
+  const target = document.getElementById(screenId);
+  if(!target)return;
+  const prev=screens[currentScreen];
+  if(!prev)return;
+  prev.classList.remove('active');prev.classList.add('exit');
+  setTimeout(()=>prev.classList.remove('exit'),500);
+  target.classList.add('active');
+  // Update currentScreen to the index (for consistent state)
+  currentScreen = Array.from(screens).indexOf(target);
+}
+
+function viewPreviousSession(){
+  goToScreen('s2b');
+}
+
 function renderBodySvg(){
   if(!activeProfile)return;
-  const outline = activeProfile.gender==='male' ? maleOutline : femaleOutline;
-  const pts = currentView==='front' ? bodyPoints.front : bodyPoints.back;
-  const svgId = currentView==='front' ? 'body-svg-front' : 'body-svg-back';
+  let outline, pts, svgId;
+  
+  if(currentView==='lower'){
+    outline = lowerOutline;
+    pts = bodyPoints.lower;
+    svgId = 'body-svg-lower';
+  } else {
+    outline = activeProfile.gender==='male' ? maleOutline : femaleOutline;
+    pts = currentView==='front' ? bodyPoints.front : bodyPoints.back;
+    svgId = currentView==='front' ? 'body-svg-front' : 'body-svg-back';
+  }
+  
   const svg=document.getElementById(svgId);
   
   let html = outline;
@@ -175,24 +231,25 @@ function renderBothViews(){
   const cv=currentView;
   currentView='front';renderBodySvg();
   currentView='back';renderBodySvg();
+  currentView='lower';renderBodySvg();
   currentView=cv;
 }
 
 /* ===== Navigation ===== */
 function go(idx){
-  if(idx===6){ // Summary screen index is s6
+  if(idx===7){ // Summary screen index is s7
     document.getElementById('sa').textContent=selectedPart||'—';
     document.getElementById('ss').textContent=selectedPart?sizeLabels[painAreaSize-1]:'—';
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
   }
-  if(idx===7){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s7
-  if(currentScreen===7&&idx!==7)stopTimer();
+  if(idx===8){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s8
+  if(currentScreen===8&&idx!==8)stopTimer();
   
-  // If moving away from intensity screen (now #s5), reset body background
-  if(currentScreen===5 && idx!==5) document.body.style.background = 'var(--bg)';
+  // If moving away from intensity screen (now #s6), reset body background
+  if(currentScreen===6 && idx!==6) document.body.style.background = 'var(--bg)';
   // If entering intensity screen, set body background based on intensity
-  if(idx===5) updateBodyColor(painLevel);
+  if(idx===6) updateBodyColor(painLevel);
 
   const screens=document.querySelectorAll('.screen');
   const prev=screens[currentScreen],next=screens[idx];
@@ -206,8 +263,10 @@ function switchBodyView(v){
   currentView=v;
   document.getElementById('bodymap-front').classList.toggle('hidden',v!=='front');
   document.getElementById('bodymap-back').classList.toggle('hidden',v!=='back');
+  document.getElementById('bodymap-lower').classList.toggle('hidden',v!=='lower');
   document.getElementById('vtab-front').classList.toggle('active',v==='front');
   document.getElementById('vtab-back').classList.toggle('active',v==='back');
+  document.getElementById('vtab-lower').classList.toggle('active',v==='lower');
 
   renderBodySvg();
 
@@ -375,12 +434,16 @@ function renderElectrodeView(){
 function startTimer(){
   timerRunning=true;document.getElementById('bpause').textContent='⏸';
   updateTimerDisplay();
+  // Vibration pattern based on pain level
+  const vibPattern = painLevel <= 3 ? [100, 200] : painLevel <= 6 ? [150, 150] : [200, 100];
   timerInterval=setInterval(()=>{
     if(!timerRunning)return;timerSeconds--;updateTimerDisplay();
+    if(timerSeconds%3===0 && navigator.vibrate) navigator.vibrate(vibPattern);
     if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false;
       document.getElementById('ttime').textContent='00:00';
       document.getElementById('bpause').textContent='✅';
       document.getElementById('timer-done-bar').classList.remove('hidden');
+      if(navigator.vibrate) navigator.vibrate([500, 100, 500]);
     }
   },1000);
 }
@@ -432,8 +495,8 @@ function setupSwipe(){
   app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY},{passive:true});
   app.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].screenX-sx,dy=Math.abs(e.changedTouches[0].screenY-sy);
-    // Modified back nav map supporting all screens s1-s6 back transitions
-    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
+    // Modified back nav map supporting all screens s1-s8 back transitions
+    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
   },{passive:true});
 }
 
@@ -447,15 +510,21 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('intro-start-btn').addEventListener('click',()=>go(1));
 
   // Welcome back screen (full page s2)
-  document.getElementById('pd-start').addEventListener('click',()=>go(3));
+  document.getElementById('pd-start').addEventListener('click',()=>go(4));
+  document.getElementById('pd-history').addEventListener('click',viewPreviousSession);
+
+  // Previous session detail screen
+  document.getElementById('ps-continue-btn').addEventListener('click',()=>{painLevel=parseInt(document.getElementById('ps-intensity').textContent)||0;go(5)});
+  document.getElementById('ps-back-btn').addEventListener('click',()=>go(2));
 
   // Precautions
-  document.getElementById('prec-continue').addEventListener('click',()=>go(4));
+  document.getElementById('prec-continue').addEventListener('click',()=>go(5));
 
   // Body map
   document.getElementById('vtab-front').addEventListener('click',()=>switchBodyView('front'));
   document.getElementById('vtab-back').addEventListener('click',()=>switchBodyView('back'));
-  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>go(5));
+  document.getElementById('vtab-lower').addEventListener('click',()=>switchBodyView('lower'));
+  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>go(6));
 
   // Size buttons
   document.querySelectorAll('.size-btn').forEach(b=>{
@@ -464,10 +533,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // Intensity
   document.getElementById('sld').addEventListener('input',e=>updInt(e.target.value));
-  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(6));
+  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(7));
 
   // Summary
-  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(7));
+  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(8));
 
   // Timer
   document.getElementById('bpause').addEventListener('click',togTimer);

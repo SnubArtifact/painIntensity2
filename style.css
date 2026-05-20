@@ -181,6 +181,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .stop-btn:hover{background:rgba(255,255,255,.14)}
 .stop-btn.stop-return{background:linear-gradient(135deg,#dc2626,#b91c1c);border-color:rgba(248,113,113,.5)}
 
+/* ===== Previous Session Details ===== */
+.session-detail{width:100%;padding:24px;display:flex;flex-direction:column;gap:16px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:12px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)}
+.detail-label{font-size:.9rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.detail-val{font-size:1.1rem;font-weight:700;color:var(--accent);text-align:right}
+
 /* ===== Common ===== */
 .continue-bar{width:100%;margin-top:auto;padding-top:12px;animation:fade-up .4s ease-out}
 .continue-bar.hidden{display:none}

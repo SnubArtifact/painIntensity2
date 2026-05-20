@@ -96,6 +96,25 @@
       </div>
     </section>
 
+    <!-- Screen 2b: Previous Session Details -->
+    <section class="screen" id="s2b">
+      <div class="sc">
+        <div class="hdr"><span class="badge">Previous Session</span><h2>Last Treatment</h2></div>
+        <div class="session-detail glass">
+          <div class="detail-row"><span class="detail-label">Area Treated:</span><span class="detail-val" id="ps-area">—</span></div>
+          <div class="detail-row"><span class="detail-label">Intensity Level:</span><span class="detail-val" id="ps-intensity">—</span></div>
+          <div class="detail-row"><span class="detail-label">Duration:</span><span class="detail-val" id="ps-duration">—</span></div>
+        </div>
+        <div class="continue-bar">
+          <div class="continue-btn" id="ps-continue-btn" style="background:linear-gradient(135deg,var(--ok),#059669)"><span>Continue Session</span></div>
+        </div>
+        <div class="continue-bar">
+          <div class="continue-btn" id="ps-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)"><span>Back to Welcome</span></div>
+        </div>
+        <div class="swipe-hint"><span>Swipe right to go back</span></div>
+      </div>
+    </section>
+
     <!-- Screen 3: Precautions -->
     <section class="screen" id="s3">
       <div class="sc">
@@ -118,11 +137,13 @@
         <div class="view-toggle">
           <div class="vtab active" id="vtab-front" data-view="front">Front</div>
           <div class="vtab" id="vtab-back" data-view="back">Back</div>
+          <div class="vtab" id="vtab-lower" data-view="lower">Lower</div>
         </div>
         <div class="bodymap-layout">
           <div class="bodymap-container">
             <div class="bodymap-view" id="bodymap-front"><svg viewBox="0 0 200 420" class="body-svg" id="body-svg-front"></svg></div>
             <div class="bodymap-view hidden" id="bodymap-back"><svg viewBox="0 0 200 420" class="body-svg" id="body-svg-back"></svg></div>
+            <div class="bodymap-view hidden" id="bodymap-lower"><svg viewBox="0 0 200 300" class="body-svg" id="body-svg-lower"></svg></div>
           </div>
         </div>
         
