@@ -8,12 +8,12 @@ const sizeLabels=['Small','Medium','Large'];
 const quotes=["Every step forward is a step toward healing.","Your strength is greater than any pain.","Recovery begins with a single step.","Healing is not linear, but every effort counts.","Breathe. Believe. Begin."];
 
 const profiles=[
-  {id:1,name:'John Miller',age:45,gender:'male',photo:'https://randomuser.me/api/portraits/men/32.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10'},
-  {id:2,name:'Sarah Chen',age:32,gender:'female',photo:'https://randomuser.me/api/portraits/women/44.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10'},
-  {id:3,name:'Raj Patel',age:58,gender:'male',photo:'https://randomuser.me/api/portraits/men/86.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10'},
-  {id:4,name:'Maria Garcia',age:41,gender:'female',photo:'https://randomuser.me/api/portraits/women/65.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10'},
-  {id:5,name:'David Kim',age:67,gender:'male',photo:'https://randomuser.me/api/portraits/men/75.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10'},
-  {id:6,name:'Anna Novak',age:29,gender:'female',photo:'https://randomuser.me/api/portraits/women/21.jpg',sessions:0,lastArea:'—',lastInt:'—'}
+  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://randomuser.me/api/portraits/men/32.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10'},
+  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://randomuser.me/api/portraits/women/44.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10'},
+  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://randomuser.me/api/portraits/men/86.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10'},
+  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://randomuser.me/api/portraits/women/65.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10'},
+  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://randomuser.me/api/portraits/men/75.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10'},
+  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://randomuser.me/api/portraits/women/21.jpg',sessions:0,lastArea:'—',lastInt:'—'}
 ];
 
 function getTimerMinutes(i){if(i<=2)return 5;if(i<=4)return 10;if(i<=6)return 15;if(i<=8)return 20;return 25}
@@ -76,10 +76,10 @@ const bodyPoints = {
     'Right Shoulder': {cx: 130, cy: 75},
     'Left Arm': {cx: 55, cy: 120},
     'Right Arm': {cx: 145, cy: 120},
-    'Left Elbow': {cx: 45, cy: 150},
-    'Right Elbow': {cx: 155, cy: 150},
-    'Left Wrist': {cx: 35, cy: 185},
-    'Right Wrist': {cx: 165, cy: 185},
+    'Left Elbow': {cx: 54, cy: 150},
+    'Right Elbow': {cx: 145, cy: 150},
+    'Left Wrist': {cx: 47, cy: 185},
+    'Right Wrist': {cx: 158, cy: 185},
     'Abdomen': {cx: 100, cy: 140},
     'Left Thigh': {cx: 75, cy: 220},
     'Right Thigh': {cx: 125, cy: 220},
@@ -98,10 +98,10 @@ const bodyPoints = {
     'Lower Back': {cx: 100, cy: 150},
     'Left Arm': {cx: 55, cy: 120},
     'Right Arm': {cx: 145, cy: 120},
-    'Left Elbow': {cx: 45, cy: 150},
-    'Right Elbow': {cx: 155, cy: 150},
-    'Left Wrist': {cx: 35, cy: 185},
-    'Right Wrist': {cx: 165, cy: 185},
+    'Left Elbow': {cx: 54, cy: 150},
+    'Right Elbow': {cx: 145, cy: 150},
+    'Left Wrist': {cx: 47, cy: 185},
+    'Right Wrist': {cx: 158, cy: 185},
     'Left Thigh': {cx: 75, cy: 220},
     'Right Thigh': {cx: 125, cy: 220},
     'Left Calf': {cx: 75, cy: 325},
