@@ -22,13 +22,30 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
 
 /* ===== Intro Landing Screen ===== */
-.intro-sc{justify-content:center;height:100%}
-.intro-logo{margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(99,102,241,.4));animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.intro-content{text-align:center;display:flex;flex-direction:column;gap:12px}
-.intro-title{font-size:3.8rem;font-weight:900;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,var(--text2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.intro-accent{background:linear-gradient(135deg,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.intro-tagline{font-size:1.15rem;color:var(--text2);line-height:1.5;font-weight:500;margin-top:8px}
+.intro-sc{justify-content:center;height:100%;max-width:580px;gap:24px}
+.intro-logo{position:relative;margin-bottom:8px;filter:drop-shadow(0 0 40px rgba(99,102,241,.55));animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.logo-glow-ring{position:absolute;inset:-15px;border-radius:50%;border:2px dashed rgba(167,139,250,.25);animation:rotate-glow 25s linear infinite;pointer-events:none}
+@keyframes rotate-glow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.pulse-svg{animation:pulse-logo 2.5s ease-in-out infinite}
+@keyframes pulse-logo{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.intro-system-badge{align-self:center;background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.35);color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.12em;padding:6px 14px;border-radius:20px;margin-bottom:4px;box-shadow:0 0 15px rgba(99,102,241,.1)}
+.intro-content{text-align:center;display:flex;flex-direction:column;gap:8px}
+.intro-title{font-size:3.5rem;font-weight:900;letter-spacing:-.04em;background:linear-gradient(135deg,#ffffff 40%,#cbd5e1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 10px 30px rgba(0,0,0,.3)}
+.intro-accent{background:linear-gradient(135deg,#c084fc,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.intro-tagline{font-size:1.05rem;color:var(--text2);line-height:1.6;font-weight:500;max-width:420px;margin:0 auto}
+
+.intro-features{display:flex;flex-direction:column;gap:14px;width:100%;padding:20px;border-radius:var(--radius);border:1px solid rgba(255,255,255,.05);box-shadow:0 15px 35px rgba(0,0,0,.25)}
+.feat-item{display:flex;align-items:center;gap:14px;transition:all .3s}
+.feat-icon{font-size:1.4rem;width:42px;height:42px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.feat-text{display:flex;flex-direction:column;gap:2px;text-align:left}
+.feat-text h4{font-size:.9rem;font-weight:700;color:var(--text)}
+.feat-text p{font-size:.75rem;color:var(--text2);line-height:1.3}
+
+.begin-therapy-btn{padding:18px 24px;font-size:1.1rem;background:linear-gradient(135deg,#818cf8,#6366f1);border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 30px rgba(99,102,241,.4);animation:begin-pulse 3s infinite}
+@keyframes begin-pulse{0%,100%{box-shadow:0 8px 25px rgba(99,102,241,.3)}50%{box-shadow:0 8px 35px rgba(99,102,241,.5),0 0 15px rgba(167,139,250,.2)}}
+.begin-therapy-btn svg{transition:transform .3s ease}
+.begin-therapy-btn:hover svg{transform:translateX(5px)}
 
 /* ===== Profiles ===== */
 .profiles-sc{max-width:540px;justify-content:center;height:100%}
@@ -43,17 +60,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .profile-card:active .profile-photo{border-color:var(--accent)}
 .profile-name{font-size:1.05rem;font-weight:700;text-align:center;color:var(--text)}
 
-/* ===== Profile Detail Overlay ===== */
-.profile-overlay{position:fixed;inset:0;background:rgba(5,5,15,.85);backdrop-filter:blur(20px);z-index:50;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .4s}
-.profile-overlay.visible{opacity:1;visibility:visible}
-.profile-detail{
-  background:linear-gradient(160deg,rgba(20,20,40,.95),rgba(10,10,20,.98));
-  border:1px solid rgba(129,140,248,.15);border-radius:24px;
-  padding:40px 32px;display:flex;flex-direction:column;align-items:center;gap:20px;
-  max-width:380px;width:92%;transform:scale(.8) translateY(40px);transition:all .5s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 40px rgba(99,102,241,.08);
+/* ===== Welcome Back Screen (Full Page s2) ===== */
+.welcome-sc {
+  justify-content: center;
+  height: 100%;
+  max-width: 440px;
+  gap: 24px;
 }
-.profile-overlay.visible .profile-detail{transform:scale(1) translateY(0)}
 
 .pd-photo-wrap{position:relative}
 .pd-photo-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--accent);opacity:.4;animation:photo-glow 3s ease-in-out infinite}
@@ -87,7 +100,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .bodymap-container{width:100%;display:flex;justify-content:center;margin:10px 0}
 .bodymap-view{width:240px;transition:opacity .3s}
 .bodymap-view.hidden{display:none}
-.body-svg{width:100%;height:auto}
+.body-svg{width:100%;height:auto;filter:drop-shadow(0 4px 20px rgba(0,0,0,0.15))}
+.body-outline{fill:rgba(255,255,255,0.06);stroke:rgba(255,255,255,0.32);stroke-width:1.5;transition:all .3s ease-in-out;vector-effect:non-scaling-stroke}
+.body-group:hover .body-outline{fill:rgba(255,255,255,0.09);stroke:rgba(129,140,248,0.5)}
 .view-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
 .vtab{padding:10px 32px;background:transparent;color:var(--text2);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s}
 .vtab.active{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff}

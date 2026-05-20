@@ -20,25 +20,53 @@ function getTimerMinutes(i){if(i<=2)return 5;if(i<=4)return 10;if(i<=6)return 15
 
 /* ===== Realistic Body Paths with Segmentation Lines ===== */
 const internalLines = `
-<g stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none" opacity="0.7">
-  <!-- Shoulders / Arms -->
-  <path d="M65 75 Q75 100 60 120"/>
-  <path d="M135 75 Q125 100 140 120"/>
-  <!-- Elbows -->
-  <path d="M40 140 L55 150"/>
-  <path d="M160 140 L145 150"/>
-  <!-- Neck/Chest -->
-  <path d="M85 60 Q100 65 115 60"/>
-  <!-- Waist -->
-  <path d="M70 180 Q100 170 130 180"/>
+<g stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none" opacity="0.6">
+  <!-- Collarbones -->
+  <path d="M 75 75 Q 100 80 125 75"/>
+  <!-- Chest / Pecs -->
+  <path d="M 80 105 Q 100 112 120 105" />
+  <!-- Ribs / Waist details -->
+  <path d="M 82 135 Q 100 140 118 135" />
   <!-- Knees -->
-  <path d="M70 250 L130 250" stroke-dasharray="2 4"/>
-  <path d="M70 290 L130 290" stroke-dasharray="2 4"/>
+  <path d="M 68 275 L 82 275" stroke-dasharray="1 2"/>
+  <path d="M 118 275 L 132 275" stroke-dasharray="1 2"/>
 </g>`;
 
-const maleOutline = `<path class="body-outline" d="M100 20 C110 20, 115 30, 115 40 C115 50, 110 55, 105 55 L105 60 C125 60, 140 70, 145 80 L160 140 C165 160, 175 190, 170 195 C165 200, 155 190, 150 170 L140 120 L130 180 C125 210, 135 250, 135 280 L135 370 C140 380, 135 390, 125 390 C115 390, 115 380, 115 370 L110 230 C105 200, 95 200, 90 230 L85 370 C85 380, 85 390, 75 390 C65 390, 60 380, 65 370 L65 280 C65 250, 75 210, 70 180 L60 120 L50 170 C45 190, 35 200, 30 195 C25 190, 35 160, 40 140 L55 80 C60 70, 75 60, 95 60 L95 55 C90 55, 85 50, 85 40 C85 30, 90 20, 100 20 Z" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.4)" stroke-width="2" filter="drop-shadow(0 0 10px rgba(255,255,255,0.1))"/>` + internalLines;
+const maleOutline = `
+<g class="body-group">
+  <!-- Head -->
+  <ellipse class="body-outline" cx="100" cy="38" rx="13" ry="17" />
+  <!-- Neck -->
+  <path class="body-outline" d="M94 54 C94 62, 95 66, 95 66 L105 66 C105 66, 106 62, 106 54 Z" />
+  <!-- Torso -->
+  <path class="body-outline" d="M70 74 C68 85, 72 105, 72 110 C72 125, 78 150, 78 160 C78 170, 74 185, 74 195 L126 195 C126 185, 122 170, 122 160 C122 150, 128 125, 128 110 C128 105, 132 85, 130 74 Z" />
+  <!-- Left Arm -->
+  <path class="body-outline" d="M70 74 C60 76, 52 100, 52 110 C52 122, 47 135, 47 145 C47 160, 39 175, 39 185 C39 192, 34 200, 34 205 C36 207, 44 200, 46 195 L50 185 C55 170, 62 145, 62 135 L62 115 C62 110, 66 90, 70 74 Z" />
+  <!-- Right Arm -->
+  <path class="body-outline" d="M130 74 C140 76, 148 100, 148 110 C148 122, 153 135, 153 145 C153 160, 161 175, 161 185 C161 192, 166 200, 166 205 C164 207, 156 200, 154 195 L150 185 C145 170, 138 145, 138 135 L138 115 C138 110, 134 90, 130 74 Z" />
+  <!-- Left Leg -->
+  <path class="body-outline" d="M74 195 C70 215, 68 245, 68 260 C68 275, 70 290, 70 305 C70 325, 71 345, 71 365 C71 372, 69 382, 69 385 C73 388, 81 385, 83 383 L83 370 C83 345, 87 315, 87 295 C87 270, 89 240, 89 220 L96 200 Z" />
+  <!-- Right Leg -->
+  <path class="body-outline" d="M126 195 C130 215, 132 245, 132 260 C132 275, 130 290, 130 305 C130 325, 129 345, 129 365 C129 372, 131 382, 131 385 C127 388, 119 385, 117 383 L117 370 C117 345, 113 315, 113 295 C113 270, 111 240, 111 220 L104 200 Z" />
+</g>` + internalLines;
 
-const femaleOutline = `<path class="body-outline" d="M100 22 C108 22, 112 30, 112 38 C112 48, 108 52, 104 54 L104 60 C118 62, 130 70, 134 80 L146 140 C150 160, 160 190, 155 195 C150 200, 142 190, 138 170 L132 120 L126 180 C122 210, 138 230, 134 280 L130 370 C132 380, 130 390, 122 390 C114 390, 114 380, 114 370 L110 230 C106 200, 94 200, 90 230 L86 370 C86 380, 86 390, 78 390 C70 390, 68 380, 70 370 L66 280 C62 230, 78 210, 74 180 L68 120 L62 170 C58 190, 50 200, 45 195 C40 190, 50 160, 54 140 L66 80 C70 70, 82 62, 96 60 L96 54 C92 52, 88 48, 88 38 C88 30, 92 22, 100 22 Z" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.4)" stroke-width="2" filter="drop-shadow(0 0 10px rgba(255,255,255,0.1))"/>` + internalLines;
+const femaleOutline = `
+<g class="body-group">
+  <!-- Head -->
+  <ellipse class="body-outline" cx="100" cy="38" rx="12" ry="16" />
+  <!-- Neck -->
+  <path class="body-outline" d="M95 54 C95 62, 96 66, 96 66 L104 66 C104 66, 105 62, 105 54 Z" />
+  <!-- Torso -->
+  <path class="body-outline" d="M73 76 C71 85, 74 105, 74 110 C74 125, 82 145, 82 155 C82 168, 72 182, 72 192 L128 192 C128 182, 118 168, 118 155 C118 145, 126 125, 126 110 C126 105, 129 85, 127 76 Z" />
+  <!-- Left Arm -->
+  <path class="body-outline" d="M73 76 C64 78, 56 100, 56 110 C56 122, 51 135, 51 145 C51 160, 43 175, 43 185 C43 192, 38 200, 38 205 C40 207, 48 200, 50 195 L54 185 C59 170, 66 145, 66 135 L66 115 C66 110, 70 90, 73 76 Z" />
+  <!-- Right Arm -->
+  <path class="body-outline" d="M127 76 C136 78, 144 100, 144 110 C144 122, 149 135, 149 145 C149 160, 157 175, 157 185 C157 192, 162 200, 162 205 C160 207, 152 200, 150 195 L146 185 C141 170, 134 145, 134 135 L134 115 C134 110, 130 90, 127 76 Z" />
+  <!-- Left Leg -->
+  <path class="body-outline" d="M72 192 C68 212, 66 242, 66 257 C66 272, 68 287, 68 302 C68 322, 69 342, 69 362 C69 369, 67 379, 67 382 C71 385, 79 382, 81 380 L81 367 C81 342, 85 312, 85 292 C85 267, 87 237, 87 217 L94 197 Z" />
+  <!-- Right Leg -->
+  <path class="body-outline" d="M128 192 C132 212, 134 242, 134 257 C134 272, 132 287, 132 302 C132 322, 131 342, 131 362 C131 369, 133 379, 133 382 C129 385, 121 382, 119 380 L119 367 C119 342, 115 312, 115 292 C115 267, 113 237, 113 217 L106 197 Z" />
+</g>` + internalLines;
 
 /* Body points as requested */
 const bodyPoints = {
@@ -83,17 +111,18 @@ const bodyPoints = {
   }
 };
 // Smaller uniform ring sizes for all areas
-const ringSizes = [10, 16, 24];
+const ringSizes = [6, 10, 14];
 
 /* ===== Render Functions ===== */
 function renderProfiles(){
-  const g=document.getElementById('profile-grid');g.innerHTML='';
-  profiles.forEach(p=>{
-    const c=document.createElement('div');c.className='profile-card';
-    c.innerHTML=`<img class="profile-photo" src="${p.photo}" alt="${p.name}" onerror="this.style.background='linear-gradient(135deg,#6366f1,#8b5cf6)';this.alt='${p.name[0]}'"/><div class="profile-name">${p.name}</div>`;
-    c.addEventListener('click',()=>openProfileDetail(p));
-    g.appendChild(c);
-  });
+    console.log('Rendering profiles');
+    const g=document.getElementById('profile-grid');g.innerHTML='';
+    profiles.forEach(p=>{
+      const c=document.createElement('div');c.className='profile-card';
+      c.innerHTML=`<img class="profile-photo" src="${p.photo}" alt="${p.name}" onerror="this.style.background='linear-gradient(135deg,#6366f1,#8b5cf6)';this.alt='${p.name[0]}'"/><div class="profile-name">${p.name}</div>`;
+      c.addEventListener('click',()=>{console.log('Profile clicked', p.id); openProfileDetail(p);});
+      g.appendChild(c);
+    });
 }
 
 function openProfileDetail(p){
@@ -104,9 +133,10 @@ function openProfileDetail(p){
   document.getElementById('pd-sessions').textContent=p.sessions;
   document.getElementById('pd-last-area').textContent=p.lastArea;
   document.getElementById('pd-last-int').textContent=p.lastInt;
-  document.getElementById('profile-overlay').classList.add('visible');
+  renderBothViews();
+  // Delay navigation to ensure UI is ready
+  setTimeout(() => go(2), 0);
 }
-function closeProfileDetail(){document.getElementById('profile-overlay').classList.remove('visible')}
 
 function renderBodySvg(){
   if(!activeProfile)return;
@@ -138,19 +168,19 @@ function renderBothViews(){
 
 /* ===== Navigation ===== */
 function go(idx){
-  if(idx===5){ // Summary screen index changed to 5
+  if(idx===6){ // Summary screen index is s6
     document.getElementById('sa').textContent=selectedPart||'—';
     document.getElementById('ss').textContent=selectedPart?sizeLabels[painAreaSize-1]:'—';
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
   }
-  if(idx===6){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')}
-  if(currentScreen===6&&idx!==6)stopTimer();
+  if(idx===7){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s7
+  if(currentScreen===7&&idx!==7)stopTimer();
   
-  // If moving away from intensity screen (now #s4), reset body background
-  if(currentScreen===4 && idx!==4) document.body.style.background = 'var(--bg)';
+  // If moving away from intensity screen (now #s5), reset body background
+  if(currentScreen===5 && idx!==5) document.body.style.background = 'var(--bg)';
   // If entering intensity screen, set body background based on intensity
-  if(idx===4) updateBodyColor(painLevel);
+  if(idx===5) updateBodyColor(painLevel);
 
   const screens=document.querySelectorAll('.screen');
   const prev=screens[currentScreen],next=screens[idx];
@@ -163,7 +193,7 @@ function go(idx){
 function switchBodyView(v){
   currentView=v;
   document.getElementById('bodymap-front').classList.toggle('hidden',v!=='front');
-  document.getElementById('bodymap-back').classList.toggle('hidden',v==='back');
+  document.getElementById('bodymap-back').classList.toggle('hidden',v!=='back');
   document.getElementById('vtab-front').classList.toggle('active',v==='front');
   document.getElementById('vtab-back').classList.toggle('active',v==='back');
   
@@ -266,37 +296,51 @@ function renderElectrodeView(){
   const sz=120; // Tight zoom window
   svg.setAttribute('viewBox',`${pt.cx-sz/2} ${pt.cy-sz/2} ${sz} ${sz}`);
   
-  let html = outline.replace('0.12','0.2').replace('0.4','0.6'); // enhance visibility
+  let html = outline;
   
   // Pain ring in zoom
   const rSize = ringSizes[painAreaSize-1];
-  html+=`<circle cx="${pt.cx}" cy="${pt.cy}" r="${rSize}" fill="rgba(248,113,113,.2)" stroke="rgba(248,113,113,.6)" stroke-width="2" stroke-dasharray="4 2"/>`;
+  html+=`<circle cx="${pt.cx}" cy="${pt.cy}" r="${rSize}" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.6)" stroke-width="1.5" stroke-dasharray="3 2"/>`;
   
-  // Realistic TENS Electrode Placement
-  // Pads are placed in a clinical standard cross or parallel setup around the area.
-  const padDist = rSize + 8; 
-  const padW = 16, padH = 22; // Rectangular pads
-  
-  const positions = [
-    {x: pt.cx - 15, y: pt.cy - padDist - 10, ch: 'a', rot: 0},
-    {x: pt.cx + 15, y: pt.cy - padDist - 10, ch: 'a', rot: 0},
-    {x: pt.cx - 15, y: pt.cy + padDist + 10, ch: 'b', rot: 180},
-    {x: pt.cx + 15, y: pt.cy + padDist + 10, ch: 'b', rot: 180}
-  ];
+  // Smart On-Body Electrode Mapping
+  const isNarrow = ['Neck', 'Left Arm', 'Right Arm', 'Left Elbow', 'Right Elbow', 'Left Wrist', 'Right Wrist', 'Left Calf', 'Right Calf', 'Left Foot', 'Right Foot', 'Left Thigh', 'Right Thigh'].includes(selectedPart);
+
+  let positions = [];
+  if (isNarrow) {
+    // Vertical line placement (stays perfectly on the narrow body part bone/muscle midline)
+    positions = [
+      {x: pt.cx, y: pt.cy - 18, ch: 'A', rot: 0},
+      {x: pt.cx, y: pt.cy - 6, ch: 'A', rot: 0},
+      {x: pt.cx, y: pt.cy + 6, ch: 'B', rot: 0},
+      {x: pt.cx, y: pt.cy + 18, ch: 'B', rot: 0}
+    ];
+  } else {
+    // Tight square/cross placement for wider parts (shoulders, abdomen, back, knees)
+    positions = [
+      {x: pt.cx - 9, y: pt.cy - 12, ch: 'A', rot: -15},
+      {x: pt.cx + 9, y: pt.cy - 12, ch: 'A', rot: 15},
+      {x: pt.cx - 9, y: pt.cy + 12, ch: 'B', rot: -15},
+      {x: pt.cx + 9, y: pt.cy + 12, ch: 'B', rot: 15}
+    ];
+  }
   
   positions.forEach((pos, i)=>{
-    // TENS Pad drawing
+    // Elegant circular clinical TENS Gel Pad
     html+=`
       <g transform="translate(${pos.x},${pos.y}) rotate(${pos.rot})">
-        <!-- Pad Base -->
-        <rect x="${-padW/2}" y="${-padH/2}" width="${padW}" height="${padH}" class="elec-pad elec-pad-${pos.ch}"/>
-        <!-- Wire Connector Node -->
-        <circle cx="0" cy="-6" r="2.5" fill="#1e293b" stroke="#fff" stroke-width="0.5"/>
-        <circle cx="0" cy="-6" r="1" fill="#94a3b8"/>
-        <!-- Wire Tail -->
-        <path d="M0 -8 Q0 -15 -8 -20" stroke="#1e293b" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-        <!-- Channel Label -->
-        <text x="0" y="4" text-anchor="middle" fill="#64748b" font-size="5" font-weight="800" font-family="Inter,sans-serif">${pos.ch.toUpperCase()}</text>
+        <!-- Gel Outer Border Glow -->
+        <circle cx="0" cy="0" r="7.5" fill="none" stroke="rgba(99,102,241,0.2)" stroke-width="1.5" />
+        <!-- Gel Base -->
+        <circle cx="0" cy="0" r="6" fill="rgba(241,245,249,0.95)" stroke="#6366f1" stroke-width="1" />
+        <!-- Inner Gel Ring -->
+        <circle cx="0" cy="0" r="4.2" fill="none" stroke="rgba(99,102,241,0.25)" stroke-width="0.5" />
+        <!-- Snap Connector -->
+        <circle cx="0" cy="0" r="1.8" fill="#334155" stroke="#ffffff" stroke-width="0.5"/>
+        <circle cx="0" cy="0" r="0.8" fill="#94a3b8"/>
+        <!-- Wire connection line curving away -->
+        <path d="M 0 0 Q ${i % 2 === 0 ? -12 : 12} ${pos.y < pt.cy ? -15 : 15} ${i % 2 === 0 ? -24 : 24} ${pos.y < pt.cy ? -30 : 30}" stroke="rgba(71,85,105,0.7)" stroke-width="0.8" fill="none" stroke-linecap="round" stroke-dasharray="0.5 1" />
+        <!-- Channel Text Tag -->
+        <text x="0" y="11" text-anchor="middle" fill="#818cf8" font-size="5" font-weight="900" font-family="Inter,sans-serif">${pos.ch}${i % 2 === 0 ? '1' : '2'}</text>
       </g>`;
   });
   
@@ -351,8 +395,8 @@ function setupSwipe(){
   app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY},{passive:true});
   app.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].screenX-sx,dy=Math.abs(e.changedTouches[0].screenY-sy);
-    // Modified back nav map
-    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
+    // Modified back nav map supporting all screens s1-s6 back transitions
+    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
   },{passive:true});
 }
 
@@ -365,21 +409,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Intro
   document.getElementById('intro-start-btn').addEventListener('click',()=>go(1));
 
-  // Profile overlay
-  document.getElementById('pd-start').addEventListener('click',()=>{
-    closeProfileDetail();
-    renderBothViews();
-    setTimeout(()=>go(2),350);
-  });
-  document.getElementById('profile-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeProfileDetail()});
+  // Welcome back screen (full page s2)
+  document.getElementById('pd-start').addEventListener('click',()=>go(3));
 
   // Precautions
-  document.getElementById('prec-continue').addEventListener('click',()=>go(3));
+  document.getElementById('prec-continue').addEventListener('click',()=>go(4));
 
   // Body map
   document.getElementById('vtab-front').addEventListener('click',()=>switchBodyView('front'));
   document.getElementById('vtab-back').addEventListener('click',()=>switchBodyView('back'));
-  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>go(4));
+  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>go(5));
 
   // Size buttons
   document.querySelectorAll('.size-btn').forEach(b=>{
@@ -388,10 +427,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // Intensity
   document.getElementById('sld').addEventListener('input',e=>updInt(e.target.value));
-  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(5));
+  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(6));
 
   // Summary
-  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(6));
+  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(7));
 
   // Timer
   document.getElementById('bpause').addEventListener('click',togTimer);

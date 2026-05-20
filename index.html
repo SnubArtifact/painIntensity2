@@ -19,21 +19,46 @@
     <section class="screen active" id="s0">
       <div class="sc intro-sc">
         <div class="intro-logo">
-          <svg viewBox="0 0 48 48" width="80" height="80" fill="none">
+          <div class="logo-glow-ring"></div>
+          <svg viewBox="0 0 48 48" width="96" height="96" fill="none" class="pulse-svg">
             <rect x="2" y="2" width="44" height="44" rx="16" fill="url(#intro-g)" opacity=".15" />
             <path d="M10 24h6l3-8 4 16 4-12 3 4h8" stroke="url(#intro-g)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
             <defs><linearGradient id="intro-g" x1="4" y1="4" x2="44" y2="44"><stop stop-color="#a78bfa" /><stop offset="1" stop-color="#6366f1" /></linearGradient></defs>
           </svg>
         </div>
         <div class="intro-content">
+          <div class="intro-system-badge">CLINICAL THERAPY SYSTEM</div>
           <h1 class="intro-title">Neuro<span class="intro-accent">Sync</span></h1>
-          <p class="intro-tagline">Advanced Pain Management<br/>& Recovery Tracking</p>
+          <p class="intro-tagline">Advanced Pain Management &amp; Intelligent Recovery Tracking</p>
         </div>
-        <div class="continue-bar" style="margin-top: 40px;">
-          <div class="continue-btn" id="intro-start-btn">
+        <div class="intro-features glass">
+          <div class="feat-item">
+            <span class="feat-icon">🎯</span>
+            <div class="feat-text">
+              <h4>Precision Body Mapping</h4>
+              <p>Locate and track specific zones accurately</p>
+            </div>
+          </div>
+          <div class="feat-item">
+            <span class="feat-icon">⚡</span>
+            <div class="feat-text">
+              <h4>Electrode Alignment</h4>
+              <p>Dynamic TENS pad clinical positioning</p>
+            </div>
+          </div>
+          <div class="feat-item">
+            <span class="feat-icon">📈</span>
+            <div class="feat-text">
+              <h4>Therapeutic Analytics</h4>
+              <p>Intensity grading and session recovery timers</p>
+            </div>
+          </div>
+        </div>
+        <div class="continue-bar" style="margin-top: 16px;">
+          <div class="continue-btn begin-therapy-btn" id="intro-start-btn">
             <span>Begin Session</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
@@ -48,23 +73,31 @@
       </div>
     </section>
 
-    <!-- Profile Detail Overlay -->
-    <div class="profile-overlay" id="profile-overlay">
-      <div class="profile-detail" id="profile-detail">
+    <!-- Screen 2: Welcome Back (Full Screen) -->
+    <section class="screen" id="s2">
+      <div class="sc welcome-sc">
         <div class="pd-photo-wrap"><img class="pd-photo" id="pd-photo" src="" alt="Profile" /></div>
         <h2 class="pd-welcome" id="pd-welcome">Welcome back!</h2>
         <p class="pd-quote" id="pd-quote"></p>
-        <div class="pd-history" id="pd-history">
+        <div class="pd-history glass" id="pd-history">
           <div class="pd-stat"><span class="pd-stat-val" id="pd-sessions">0</span><span class="pd-stat-lbl">Sessions</span></div>
           <div class="pd-stat"><span class="pd-stat-val" id="pd-last-area">—</span><span class="pd-stat-lbl">Last Area</span></div>
           <div class="pd-stat"><span class="pd-stat-val" id="pd-last-int">—</span><span class="pd-stat-lbl">Last Level</span></div>
         </div>
-        <div class="pd-btn" id="pd-start">Get Started</div>
+        <div class="continue-bar" style="margin-top: 24px;">
+          <div class="continue-btn pd-btn" id="pd-start">
+            <span>Get Started</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="swipe-hint"><span>Swipe right to go back</span></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Screen 2: Precautions -->
-    <section class="screen" id="s2">
+    <!-- Screen 3: Precautions -->
+    <section class="screen" id="s3">
       <div class="sc">
         <div class="hdr"><span class="badge">Before You Begin</span><h2>Safety Precautions</h2></div>
         <div class="precaution-list" id="precaution-list">
@@ -78,8 +111,8 @@
       </div>
     </section>
 
-    <!-- Screen 3: Body Map -->
-    <section class="screen" id="s3">
+    <!-- Screen 4: Body Map -->
+    <section class="screen" id="s4">
       <div class="sc bodymap-sc">
         <div class="hdr"><span class="badge">Step 1 / 3</span><h2>Select Pain Area</h2><p>Tap on the body to mark your pain</p></div>
         <div class="view-toggle">
@@ -110,8 +143,8 @@
       </div>
     </section>
 
-    <!-- Screen 4: Pain Intensity -->
-    <section class="screen" id="s4">
+    <!-- Screen 5: Pain Intensity -->
+    <section class="screen" id="s5">
       <div class="sc intensity-sc" id="intensity-sc">
         <div class="hdr iz"><span class="badge">Step 2 / 3</span><h2>Pain Intensity</h2></div>
         <div class="idisplay iz"><div class="ival" id="ival">0</div><div class="ilbl" id="ilbl">No Pain</div></div>
@@ -123,8 +156,8 @@
       </div>
     </section>
 
-    <!-- Screen 5: Summary -->
-    <section class="screen" id="s5">
+    <!-- Screen 6: Summary -->
+    <section class="screen" id="s6">
       <div class="sc">
         <div class="hdr"><span class="badge">Step 3 / 3</span><h2>Summary</h2></div>
         <div class="sumcard glass">
@@ -143,8 +176,8 @@
       </div>
     </section>
 
-    <!-- Screen 6: Timer + Electrodes -->
-    <section class="screen" id="s6">
+    <!-- Screen 7: Timer + Electrodes -->
+    <section class="screen" id="s7">
       <div class="sc">
         <div class="hdr"><span class="badge tbadge">Session Active</span><h2>Recovery Session</h2><p id="timer-desc"></p></div>
         <div class="session-layout">
