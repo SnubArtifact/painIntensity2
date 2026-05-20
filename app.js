@@ -112,6 +112,18 @@ const bodyPoints = {
 };
 // Smaller uniform ring sizes for all areas
 const ringSizes = [6, 10, 14];
+const ringSizeLookup = {
+  tiny: ['Neck','Left Elbow','Right Elbow','Left Wrist','Right Wrist','Left Foot','Right Foot'],
+  narrow: ['Left Arm','Right Arm','Left Calf','Right Calf','Left Thigh','Right Thigh'],
+  medium: ['Left Shoulder','Right Shoulder','Left Knee','Right Knee','Upper Back','Lower Back','Abdomen']
+};
+function getRingRadius(zone, size){
+  if(size < 1 || size > 3) size = 1;
+  if(ringSizeLookup.tiny.includes(zone)) return [3, 6, 9][size - 1];
+  if(ringSizeLookup.narrow.includes(zone)) return [4, 7, 10][size - 1];
+  if(ringSizeLookup.medium.includes(zone)) return [6, 10, 14][size - 1];
+  return [7, 11, 15][size - 1];
+}
 
 /* ===== Render Functions ===== */
 function renderProfiles(){
@@ -196,17 +208,22 @@ function switchBodyView(v){
   document.getElementById('bodymap-back').classList.toggle('hidden',v!=='back');
   document.getElementById('vtab-front').classList.toggle('active',v==='front');
   document.getElementById('vtab-back').classList.toggle('active',v==='back');
-  
-  // Keep ring on selected view if the selected part exists on this view
+
+  renderBodySvg();
+
   const ring = document.getElementById('pain-ring-'+v);
   if(selectedPart && bodyPoints[v][selectedPart]){
-    const pt = bodyPoints[v][selectedPart];
-    ring.setAttribute('cx', pt.cx);
-    ring.setAttribute('cy', pt.cy);
-    ring.setAttribute('r', ringSizes[painAreaSize-1]);
-    ring.classList.add('visible');
+    updatePainRing();
+    document.getElementById('selection-controls').classList.remove('hidden');
+    document.getElementById('bodymap-continue').classList.remove('hidden');
+    document.getElementById('zone-name').textContent=selectedPart;
   } else {
     ring.classList.remove('visible');
+    if(selectedPart){
+      document.getElementById('selection-controls').classList.add('hidden');
+      document.getElementById('bodymap-continue').classList.add('hidden');
+      document.getElementById('zone-name').textContent='Tap a body area';
+    }
   }
 }
 
@@ -217,9 +234,10 @@ function selectZone(zoneEl){
   const pt = bodyPoints[currentView][selectedPart];
   
   const ring=document.getElementById('pain-ring-'+currentView);
+  const radius = getRingRadius(selectedPart,painAreaSize);
   ring.setAttribute('cx', pt.cx);
   ring.setAttribute('cy', pt.cy);
-  ring.setAttribute('r', ringSizes[painAreaSize-1]);
+  ring.setAttribute('r', radius);
   ring.classList.add('visible');
   
   document.getElementById('zone-name').textContent=selectedPart;
@@ -232,7 +250,7 @@ function updatePainRing(){
   const pt = bodyPoints[currentView][selectedPart];
   if(!pt)return;
   const ring=document.getElementById('pain-ring-'+currentView);
-  ring.setAttribute('r', ringSizes[painAreaSize-1]);
+  ring.setAttribute('r', getRingRadius(selectedPart,painAreaSize));
 }
 
 function updateSizeBtns(){
@@ -299,23 +317,30 @@ function renderElectrodeView(){
   let html = outline;
   
   // Pain ring in zoom
-  const rSize = ringSizes[painAreaSize-1];
+  const rSize = getRingRadius(selectedPart,painAreaSize);
   html+=`<circle cx="${pt.cx}" cy="${pt.cy}" r="${rSize}" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.6)" stroke-width="1.5" stroke-dasharray="3 2"/>`;
   
   // Smart On-Body Electrode Mapping
-  const isNarrow = ['Neck', 'Left Arm', 'Right Arm', 'Left Elbow', 'Right Elbow', 'Left Wrist', 'Right Wrist', 'Left Calf', 'Right Calf', 'Left Foot', 'Right Foot', 'Left Thigh', 'Right Thigh'].includes(selectedPart);
+  const tinyParts = ['Neck','Left Elbow','Right Elbow','Left Wrist','Right Wrist','Left Foot','Right Foot'];
+  const narrowParts = ['Left Arm','Right Arm','Left Calf','Right Calf','Left Thigh','Right Thigh'];
+  const isNarrow = tinyParts.includes(selectedPart) || narrowParts.includes(selectedPart);
 
   let positions = [];
-  if (isNarrow) {
-    // Vertical line placement (stays perfectly on the narrow body part bone/muscle midline)
+  if (tinyParts.includes(selectedPart)) {
     positions = [
-      {x: pt.cx, y: pt.cy - 18, ch: 'A', rot: 0},
+      {x: pt.cx, y: pt.cy - 12, ch: 'A', rot: 0},
+      {x: pt.cx, y: pt.cy - 4, ch: 'A', rot: 0},
+      {x: pt.cx, y: pt.cy + 4, ch: 'B', rot: 0},
+      {x: pt.cx, y: pt.cy + 12, ch: 'B', rot: 0}
+    ];
+  } else if (narrowParts.includes(selectedPart)) {
+    positions = [
+      {x: pt.cx, y: pt.cy - 16, ch: 'A', rot: 0},
       {x: pt.cx, y: pt.cy - 6, ch: 'A', rot: 0},
       {x: pt.cx, y: pt.cy + 6, ch: 'B', rot: 0},
-      {x: pt.cx, y: pt.cy + 18, ch: 'B', rot: 0}
+      {x: pt.cx, y: pt.cy + 16, ch: 'B', rot: 0}
     ];
   } else {
-    // Tight square/cross placement for wider parts (shoulders, abdomen, back, knees)
     positions = [
       {x: pt.cx - 9, y: pt.cy - 12, ch: 'A', rot: -15},
       {x: pt.cx + 9, y: pt.cy - 12, ch: 'A', rot: 15},
@@ -373,9 +398,21 @@ function updateTimerDisplay(){
 function emergencyStop(){
   clearInterval(timerInterval);timerRunning=false;
   const o=document.createElement('div');o.className='stop-overlay';
-  o.innerHTML=`<div class="stop-icon">🛑</div><div class="stop-text">Session Stopped</div><div class="stop-sub">Emergency stop activated</div><div class="stop-return" id="stop-ret">Return to Menu</div>`;
+  o.innerHTML=`
+    <div class="stop-icon">🛑</div>
+    <div class="stop-text">Session Stopped</div>
+    <div class="stop-sub">Emergency stop activated</div>
+    <div class="stop-actions">
+      <div class="stop-btn" id="stop-resume">Return to Session</div>
+      <div class="stop-btn stop-return" id="stop-ret">Return to Menu</div>
+    </div>`;
   document.body.appendChild(o);
   requestAnimationFrame(()=>o.classList.add('visible'));
+
+  o.querySelector('#stop-resume').addEventListener('click',()=>{
+    o.classList.remove('visible');
+    setTimeout(()=>{o.remove(); timerRunning=true; startTimer();},300);
+  });
   o.querySelector('#stop-ret').addEventListener('click',()=>{
     o.classList.remove('visible');setTimeout(()=>{o.remove();resetApp();go(0)},300);
   });
