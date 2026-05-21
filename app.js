@@ -244,8 +244,15 @@ function go(idx){
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
   }
-  if(idx===7){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s7
-  if(currentScreen===7&&idx!==7)stopTimer();
+  if(idx===8){
+  setupTimerScreen();
+  startTimer();
+  document.getElementById('timer-done-bar').classList.add('hidden');
+}
+
+if(currentScreen===8 && idx!==8){
+  stopTimer();
+}
   
   // If moving away from intensity screen (now #s5), reset body background
   if(currentScreen===5 && idx!==5) document.body.style.background = 'var(--bg)';
@@ -261,51 +268,80 @@ function go(idx){
 }
 
 function switchBodyView(v){
-  currentView=v;
-  document.getElementById('bodymap-front').classList.toggle('hidden',v!=='front');
-  document.getElementById('bodymap-back').classList.toggle('hidden',v!=='back');
-  document.getElementById('bodymap-lower').classList.toggle('hidden',v!=='lower');
-  document.getElementById('vtab-front').classList.toggle('active',v==='front');
-  document.getElementById('vtab-back').classList.toggle('active',v==='back');
-  document.getElementById('vtab-lower').classList.toggle('active',v==='lower');
+  currentView = v;
+
+  // 1. Hide all body SVG containers safely
+  document.getElementById('bodymap-front').classList.add('hidden');
+  document.getElementById('bodymap-back').classList.add('hidden');
+  document.getElementById('bodymap-lower').classList.add('hidden');
+
+  // 2. Show ONLY the selected body map container
+  document.getElementById('bodymap-' + v).classList.remove('hidden');
+
+  // 3. Make sure the view toggle container itself stays visible
+  const viewToggle = document.querySelector('.view-toggle');
+  if (viewToggle) {
+    viewToggle.style.display = 'flex'; 
+    viewToggle.classList.remove('hidden');
+  }
+
+  // 4. Cycle and update active tab styling
+  document.querySelectorAll('.vtab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  const activeTab = document.getElementById('vtab-' + v);
+  if (activeTab) activeTab.classList.add('active');
 
   renderBodySvg();
 
-  const ring = document.getElementById('pain-ring-'+v);
+  // 5. Re-render selected ring if the current view contains it
   if(selectedPart && bodyPoints[v][selectedPart]){
-    updatePainRing();
-    document.getElementById('selection-controls').classList.remove('hidden');
-    document.getElementById('bodymap-continue').classList.remove('hidden');
-    document.getElementById('zone-name').textContent=selectedPart;
-  } else {
-    ring.classList.remove('visible');
-    if(selectedPart){
-      document.getElementById('selection-controls').classList.add('hidden');
-      document.getElementById('bodymap-continue').classList.add('hidden');
-      document.getElementById('zone-name').textContent='Tap a body area';
+    const pt = bodyPoints[v][selectedPart];
+    const ring = document.getElementById('pain-ring-' + v);
+
+    if (ring) {
+      ring.setAttribute('cx', pt.cx);
+      ring.setAttribute('cy', pt.cy);
+      ring.setAttribute('r', getRingRadius(selectedPart, painAreaSize));
+      ring.classList.add('visible');
     }
   }
 }
 
-/* ===== Zone Selection ===== */
 function selectZone(zoneEl){
-  document.querySelectorAll('.pain-ring').forEach(r=>{r.classList.remove('visible');r.setAttribute('r','0')});
-  selectedPart=zoneEl.dataset.zone;
+  // Remove previous rings across all views
+  document.querySelectorAll('.pain-ring').forEach(r=>{
+    r.classList.remove('visible');
+    r.setAttribute('r','0');
+  });
+
+  selectedPart = zoneEl.dataset.zone;
   const pt = bodyPoints[currentView][selectedPart];
-  
-  const ring=document.getElementById('pain-ring-'+currentView);
-  const radius = getRingRadius(selectedPart,painAreaSize);
-  ring.setAttribute('cx', pt.cx);
-  ring.setAttribute('cy', pt.cy);
-  ring.setAttribute('r', radius);
-  ring.classList.add('visible');
-  
-  document.getElementById('zone-name').textContent=selectedPart;
+  const ring = document.getElementById('pain-ring-' + currentView);
+  const radius = getRingRadius(selectedPart, painAreaSize);
+
+  if (ring) {
+    ring.setAttribute('cx', pt.cx);
+    ring.setAttribute('cy', pt.cy);
+    ring.setAttribute('r', radius);
+    ring.classList.add('visible');
+  }
+
+  // Update text labels and control wrappers
+  document.getElementById('zone-name').textContent = selectedPart;
   document.getElementById('selection-controls').classList.remove('hidden');
   document.getElementById('bodymap-continue').classList.remove('hidden');
-  updateSizeBtns();
-}
 
+  updateSizeBtns();
+
+  // CRITICAL: Ensure view switching tabs never vanish on selection
+  const viewToggle = document.querySelector('.view-toggle');
+  if (viewToggle) {
+    viewToggle.style.display = 'flex';
+    viewToggle.classList.remove('hidden');
+  }
+}
 function updatePainRing(){
   const pt = bodyPoints[currentView][selectedPart];
   if(!pt)return;
@@ -535,10 +571,20 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // Intensity
   document.getElementById('sld').addEventListener('input',e=>updInt(e.target.value));
-  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(6));
+  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(7));
 
   // Summary
-  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(7));
+document.getElementById('summary-continue-btn')
+  .addEventListener('click', () => {
+    if (painLevel === 0) {
+      alert('No pain detected. No therapy session is needed.');
+      resetApp();
+      go(0);
+      return;
+    }
+
+    go(8);
+  });
 
   // Timer
   document.getElementById('bpause').addEventListener('click',togTimer);
