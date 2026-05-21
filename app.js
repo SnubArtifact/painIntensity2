@@ -176,6 +176,7 @@ function openProfileDetail(p){
   document.getElementById('ps-intensity').textContent=p.lastInt||'—';
   document.getElementById('ps-duration').textContent=p.lastArea!=='—' ? getTimerMinutes(parseInt(p.lastInt)||0)+' min' : '—';
   renderBothViews();
+  currentView='front';switchBodyView('front');
   // Delay navigation to ensure UI is ready
   setTimeout(() => go(2), 0);
 }
@@ -237,19 +238,19 @@ function renderBothViews(){
 
 /* ===== Navigation ===== */
 function go(idx){
-  if(idx===7){ // Summary screen index is s7
+  if(idx===6){ // Summary screen index is s6
     document.getElementById('sa').textContent=selectedPart||'—';
     document.getElementById('ss').textContent=selectedPart?sizeLabels[painAreaSize-1]:'—';
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
   }
-  if(idx===8){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s8
-  if(currentScreen===8&&idx!==8)stopTimer();
+  if(idx===7){setupTimerScreen();startTimer();document.getElementById('timer-done-bar').classList.add('hidden')} // Timer screen is s7
+  if(currentScreen===7&&idx!==7)stopTimer();
   
-  // If moving away from intensity screen (now #s6), reset body background
-  if(currentScreen===6 && idx!==6) document.body.style.background = 'var(--bg)';
+  // If moving away from intensity screen (now #s5), reset body background
+  if(currentScreen===5 && idx!==5) document.body.style.background = 'var(--bg)';
   // If entering intensity screen, set body background based on intensity
-  if(idx===6) updateBodyColor(painLevel);
+  if(idx===5) updateBodyColor(painLevel);
 
   const screens=document.querySelectorAll('.screen');
   const prev=screens[currentScreen],next=screens[idx];
@@ -495,8 +496,8 @@ function setupSwipe(){
   app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY},{passive:true});
   app.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].screenX-sx,dy=Math.abs(e.changedTouches[0].screenY-sy);
-    // Modified back nav map supporting all screens s1-s8 back transitions
-    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
+    // Modified back nav map supporting all screens s1-s7 back transitions
+    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
   },{passive:true});
 }
 
@@ -510,12 +511,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('intro-start-btn').addEventListener('click',()=>go(1));
 
   // Welcome back screen (full page s2)
-  document.getElementById('pd-start').addEventListener('click',()=>go(4));
-  document.getElementById('pd-history').addEventListener('click',viewPreviousSession);
+  document.getElementById('pd-start')?.addEventListener('click',()=>go(3));
+  document.getElementById('pd-history')?.addEventListener('click',viewPreviousSession);
 
   // Previous session detail screen
-  document.getElementById('ps-continue-btn').addEventListener('click',()=>{painLevel=parseInt(document.getElementById('ps-intensity').textContent)||0;go(5)});
-  document.getElementById('ps-back-btn').addEventListener('click',()=>go(2));
+  document.getElementById('ps-continue-btn')?.addEventListener('click',()=>{painLevel=parseInt(document.getElementById('ps-intensity').textContent)||0;go(5)});
+  document.getElementById('ps-new-session-btn')?.addEventListener('click',()=>{go(4)});
+  document.getElementById('ps-back-btn')?.addEventListener('click',()=>go(2));
 
   // Precautions
   document.getElementById('prec-continue').addEventListener('click',()=>go(5));
@@ -533,10 +535,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // Intensity
   document.getElementById('sld').addEventListener('input',e=>updInt(e.target.value));
-  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(7));
+  document.getElementById('intensity-continue-btn').addEventListener('click',()=>go(6));
 
   // Summary
-  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(8));
+  document.getElementById('summary-continue-btn').addEventListener('click',()=>go(7));
 
   // Timer
   document.getElementById('bpause').addEventListener('click',togTimer);

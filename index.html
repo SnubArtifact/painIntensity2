@@ -105,8 +105,9 @@
           <div class="detail-row"><span class="detail-label">Intensity Level:</span><span class="detail-val" id="ps-intensity">—</span></div>
           <div class="detail-row"><span class="detail-label">Duration:</span><span class="detail-val" id="ps-duration">—</span></div>
         </div>
-        <div class="continue-bar">
-          <div class="continue-btn" id="ps-continue-btn" style="background:linear-gradient(135deg,var(--ok),#059669)"><span>Continue Session</span></div>
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <div class="continue-btn" id="ps-continue-btn" style="background:linear-gradient(135deg,var(--ok),#059669);flex:1" onclick="painLevel=parseInt(document.getElementById('ps-intensity').textContent)||0;go(5)"><span>Continue Session</span></div>
+          <div class="continue-btn" id="ps-new-session-btn" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);flex:1" onclick="go(4)"><span>Start New</span></div>
         </div>
         <div class="continue-bar">
           <div class="continue-btn" id="ps-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)"><span>Back to Welcome</span></div>
