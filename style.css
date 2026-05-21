@@ -96,14 +96,33 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .prec-item span:last-child{font-size:.9rem;font-weight:500}
 
 /* ===== Body Map ===== */
-.bodymap-sc{max-width:480px}
-.bodymap-container{width:100%;display:flex;justify-content:center;margin:10px 0}
+.bodymap-sc{
+  max-width:480px;
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+.bodymap-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin:10px 0;
+  min-height: 320px;
+  align-items: flex-start;
+}
 .bodymap-view{width:240px;transition:opacity .3s}
 .bodymap-view.hidden{display:none}
 .body-svg{width:100%;height:auto;filter:drop-shadow(0 4px 20px rgba(0,0,0,0.15))}
 .body-outline{fill:rgba(255,255,255,0.06);stroke:rgba(255,255,255,0.32);stroke-width:1.5;transition:all .3s ease-in-out;vector-effect:non-scaling-stroke}
 .body-group:hover .body-outline{fill:rgba(255,255,255,0.09);stroke:rgba(129,140,248,0.5)}
-.view-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.view-toggle{
+  display:flex;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+  margin-bottom: 24px;
+}
 .vtab{padding:10px 32px;background:transparent;color:var(--text2);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s}
 .vtab.active{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff}
 .vtab:active:not(.active){background:var(--surface2)}

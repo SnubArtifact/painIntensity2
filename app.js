@@ -1,3 +1,28 @@
+function attachTimerScreenEvents() {
+  document.getElementById('bpause')?.addEventListener('click',togTimer);
+  document.getElementById('breset')?.addEventListener('click',rstTimer);
+  document.getElementById('btn-estop')?.addEventListener('click',emergencyStop);
+  document.getElementById('timer-done-btn')?.addEventListener('click',()=>{resetApp();go(0)});
+}
+function attachIntensityScreenEvents() {
+  document.getElementById('sld')?.addEventListener('input',e=>updInt(e.target.value));
+  document.getElementById('intensity-continue-btn')?.addEventListener('click',()=>go(7));
+}
+function attachBodyMapEvents() {
+  document.getElementById('vtab-front')?.addEventListener('click',()=>switchBodyView('front'));
+  document.getElementById('vtab-back')?.addEventListener('click',()=>switchBodyView('back'));
+  document.getElementById('vtab-lower')?.addEventListener('click',()=>switchBodyView('lower'));
+  document.getElementById('bodymap-continue-btn')?.addEventListener('click',()=>{
+    if (!selectedPart) {
+      alert('Please select a body part before continuing.');
+      return;
+    }
+    go(6);
+  });
+  document.querySelectorAll('.size-btn').forEach(b=>{
+    b.onclick = (e)=>{e.stopPropagation();painAreaSize=parseInt(b.dataset.size);updateSizeBtns();updatePainRing()};
+  });
+}
 /* ===== State ===== */
 let currentScreen=0, selectedPart=null, painLevel=0, painAreaSize=1;
 let timerInterval=null, timerSeconds=1200, timerRunning=false, totalTimerSeconds=1200;
@@ -8,13 +33,41 @@ const sizeLabels=['Small','Medium','Large'];
 const quotes=["Every step forward is a step toward healing.","Your strength is greater than any pain.","Recovery begins with a single step.","Healing is not linear, but every effort counts.","Breathe. Believe. Begin."];
 
 const profiles=[
-  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://randomuser.me/api/portraits/men/32.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10',history:[{area:'Lower Back',intensity:6,size:'Medium',duration:15,date:'2026-05-20'},{area:'Left Knee',intensity:4,size:'Small',duration:10,date:'2026-05-15'}]},
-  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://randomuser.me/api/portraits/women/44.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10',history:[{area:'Right Knee',intensity:4,size:'Small',duration:10,date:'2026-05-18'}]},
-  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://randomuser.me/api/portraits/men/86.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10',history:[{area:'Left Shoulder',intensity:7,size:'Large',duration:20,date:'2026-05-10'}]},
-  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://randomuser.me/api/portraits/women/65.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10',history:[{area:'Neck',intensity:3,size:'Small',duration:5,date:'2026-05-12'}]},
-  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://randomuser.me/api/portraits/men/75.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10',history:[{area:'Right Hip',intensity:5,size:'Medium',duration:15,date:'2026-05-11'}]},
-  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://randomuser.me/api/portraits/women/21.jpg',sessions:0,lastArea:'—',lastInt:'—',history:[]}
+  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://thumbs.dreamstime.com/b/indian-man-young-good-looking-people-smiling-standing-isolated-white-background-31400054.jpg?w=576',sessions:12,lastArea:'Lower Back',lastInt:'6/10',history:[]},
+  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&w=256&h=256&fit=facearea',sessions:8,lastArea:'Right Knee',lastInt:'4/10',history:[]},
+  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://thumbs.dreamstime.com/b/smart-smiling-middle-aged-indian-business-man-26978835.jpg?w=576',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10',history:[]},
+  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://bridgeindia.org.uk/wp-content/uploads/2019/05/Kamini-Gupta.xa691a87f.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10',history:[]},
+  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://www.discoverwalks.com/blog/wp-content/uploads/2020/10/800px-prime_minister_shri_narendra_modi_in_new_delhi_on_august_08_2019_cropped.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10',history:[]},
+  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&w=256&h=256&fit=facearea',sessions:0,lastArea:'—',lastInt:'—',history:[]}
 ];
+
+// Generate random session history for each profile based on their session count
+const allZones = [
+  'Neck','Left Shoulder','Right Shoulder','Left Arm','Right Arm','Left Elbow','Right Elbow','Left Wrist','Right Wrist','Abdomen','Upper Back','Lower Back','Left Thigh','Right Thigh','Left Knee','Right Knee','Left Calf','Right Calf','Left Foot','Right Foot'
+];
+function randomDate(daysAgo) {
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  return d.toISOString().slice(0,10);
+}
+function randomSession(idx) {
+  const area = allZones[Math.floor(Math.random()*allZones.length)];
+  const intensity = Math.floor(Math.random()*11);
+  const size = ['Small','Medium','Large'][Math.floor(Math.random()*3)];
+  const duration = getTimerMinutes(intensity);
+  const date = randomDate(idx*2 + Math.floor(Math.random()*2));
+  return {area,intensity,size,duration,date};
+}
+profiles.forEach(p => {
+  p.history = [];
+  for(let i=0;i<p.sessions;i++) {
+    p.history.push(randomSession(i));
+  }
+  if(p.history.length) {
+    p.lastArea = p.history[p.history.length-1].area;
+    p.lastInt = p.history[p.history.length-1].intensity + '/10';
+  }
+});
 
 function getTimerMinutes(i){if(i<=2)return 5;if(i<=4)return 10;if(i<=6)return 15;if(i<=8)return 20;return 25}
 
@@ -242,16 +295,36 @@ function renderBothViews(){
 
 /* ===== Navigation ===== */
 function go(idx){
+      if(idx===5){
+        setTimeout(attachIntensityScreenEvents, 0);
+      }
+    if(idx===4){
+      setTimeout(attachBodyMapEvents, 0);
+    }
   if(idx===6){ // Summary screen index is s6
     document.getElementById('sa').textContent=selectedPart||'—';
     document.getElementById('ss').textContent=selectedPart?sizeLabels[painAreaSize-1]:'—';
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
+    // Re-attach continue button event for robustness
+    const contBtn = document.getElementById('summary-continue-btn');
+    if (contBtn) {
+      contBtn.onclick = () => {
+        if (painLevel === 0) {
+          alert('No pain detected. No therapy session is needed.');
+          resetApp();
+          go(0);
+          return;
+        }
+        go(8);
+      };
+    }
   }
   if(idx===8){
   setupTimerScreen();
   startTimer();
   document.getElementById('timer-done-bar').classList.add('hidden');
+    setTimeout(attachTimerScreenEvents, 0);
 }
 
 if(currentScreen===8 && idx!==8){
@@ -416,6 +489,14 @@ function setupTimerScreen(){
     });
   }
   renderElectrodeView();
+
+  // Attach event listeners for pause and reset buttons every time timer screen is set up
+  setTimeout(() => {
+    const pauseBtn = document.getElementById('bpause');
+    const resetBtn = document.getElementById('breset');
+    if (pauseBtn) pauseBtn.onclick = togTimer;
+    if (resetBtn) resetBtn.onclick = rstTimer;
+  }, 0);
 }
 
 function renderElectrodeView(){
@@ -430,86 +511,68 @@ function renderElectrodeView(){
   const isMale=activeProfile.gender==='male';
   const outline=isMale?maleOutline:femaleOutline;
   
-  // Center SVG view with more zoom for small parts
-  let sz = 120;
-  if(['Left Wrist','Right Wrist','Left Elbow','Right Elbow','Left Knee','Right Knee','Left Foot','Right Foot'].includes(selectedPart)) sz = 80;
-  if(['Neck'].includes(selectedPart)) sz = 70;
+  // Center SVG view with more zoom for small parts (more aggressive zoom)
+  let sz = 70;
+  if(['Left Wrist','Right Wrist','Left Elbow','Right Elbow','Left Knee','Right Knee','Left Foot','Right Foot','Neck'].includes(selectedPart)) sz = 48;
   svg.setAttribute('viewBox',`${pt.cx-sz/2} ${pt.cy-sz/2} ${sz} ${sz}`);
-  
+
   let html = outline;
-  
+
   // Pain ring in zoom
   const rSize = getRingRadius(selectedPart,painAreaSize);
   html+=`<circle cx="${pt.cx}" cy="${pt.cy}" r="${rSize}" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.6)" stroke-width="1.5" stroke-dasharray="3 2"/>`;
-  
-  // Improved On-Body Electrode Mapping (realistic pairs)
+
+  // Dot-style electrode pads (smaller, no wires, no text)
   let positions = [];
-  // Shoulder, Arm, Thigh, Calf: vertical pair on muscle
   if(['Left Shoulder','Right Shoulder','Left Thigh','Right Thigh','Left Calf','Right Calf'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx-8, y: pt.cy-16, ch:'A', rot:-10},
-      {x: pt.cx+8, y: pt.cy-8, ch:'A', rot:10},
-      {x: pt.cx-8, y: pt.cy+8, ch:'B', rot:-10},
-      {x: pt.cx+8, y: pt.cy+16, ch:'B', rot:10}
+      {x: pt.cx-6, y: pt.cy-10},
+      {x: pt.cx+6, y: pt.cy-4},
+      {x: pt.cx-6, y: pt.cy+4},
+      {x: pt.cx+6, y: pt.cy+10}
     ];
   } else if(['Left Arm','Right Arm'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx-10, y: pt.cy-12, ch:'A', rot:-20},
-      {x: pt.cx+10, y: pt.cy-2, ch:'A', rot:20},
-      {x: pt.cx-10, y: pt.cy+2, ch:'B', rot:-20},
-      {x: pt.cx+10, y: pt.cy+12, ch:'B', rot:20}
+      {x: pt.cx-7, y: pt.cy-8},
+      {x: pt.cx+7, y: pt.cy-2},
+      {x: pt.cx-7, y: pt.cy+2},
+      {x: pt.cx+7, y: pt.cy+8}
     ];
   } else if(['Left Knee','Right Knee'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx-7, y: pt.cy-10, ch:'A', rot:-10},
-      {x: pt.cx+7, y: pt.cy-10, ch:'A', rot:10},
-      {x: pt.cx-7, y: pt.cy+10, ch:'B', rot:-10},
-      {x: pt.cx+7, y: pt.cy+10, ch:'B', rot:10}
+      {x: pt.cx-5, y: pt.cy-7},
+      {x: pt.cx+5, y: pt.cy-7},
+      {x: pt.cx-5, y: pt.cy+7},
+      {x: pt.cx+5, y: pt.cy+7}
     ];
   } else if(['Left Foot','Right Foot'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx-6, y: pt.cy-6, ch:'A', rot:-5},
-      {x: pt.cx+6, y: pt.cy-6, ch:'A', rot:5},
-      {x: pt.cx-6, y: pt.cy+6, ch:'B', rot:-5},
-      {x: pt.cx+6, y: pt.cy+6, ch:'B', rot:5}
+      {x: pt.cx-4, y: pt.cy-4},
+      {x: pt.cx+4, y: pt.cy-4},
+      {x: pt.cx-4, y: pt.cy+4},
+      {x: pt.cx+4, y: pt.cy+4}
     ];
   } else if(['Neck','Abdomen','Upper Back','Lower Back'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx-12, y: pt.cy, ch:'A', rot:0},
-      {x: pt.cx+12, y: pt.cy, ch:'A', rot:0},
-      {x: pt.cx-12, y: pt.cy+18, ch:'B', rot:0},
-      {x: pt.cx+12, y: pt.cy+18, ch:'B', rot:0}
+      {x: pt.cx-8, y: pt.cy},
+      {x: pt.cx+8, y: pt.cy},
+      {x: pt.cx-8, y: pt.cy+10},
+      {x: pt.cx+8, y: pt.cy+10}
     ];
   } else {
     // Default: cross pattern
     positions = [
-      {x: pt.cx-9, y: pt.cy-12, ch: 'A', rot: -15},
-      {x: pt.cx+9, y: pt.cy-12, ch: 'A', rot: 15},
-      {x: pt.cx-9, y: pt.cy+12, ch: 'B', rot: -15},
-      {x: pt.cx+9, y: pt.cy+12, ch: 'B', rot: 15}
+      {x: pt.cx-6, y: pt.cy-8},
+      {x: pt.cx+6, y: pt.cy-8},
+      {x: pt.cx-6, y: pt.cy+8},
+      {x: pt.cx+6, y: pt.cy+8}
     ];
   }
-  
-  positions.forEach((pos, i)=>{
-    // Elegant circular clinical TENS Gel Pad
-    html+=`
-      <g transform="translate(${pos.x},${pos.y}) rotate(${pos.rot})">
-        <!-- Gel Outer Border Glow -->
-        <circle cx="0" cy="0" r="7.5" fill="none" stroke="rgba(99,102,241,0.2)" stroke-width="1.5" />
-        <!-- Gel Base -->
-        <circle cx="0" cy="0" r="6" fill="rgba(241,245,249,0.95)" stroke="#6366f1" stroke-width="1" />
-        <!-- Inner Gel Ring -->
-        <circle cx="0" cy="0" r="4.2" fill="none" stroke="rgba(99,102,241,0.25)" stroke-width="0.5" />
-        <!-- Snap Connector -->
-        <circle cx="0" cy="0" r="1.8" fill="#334155" stroke="#ffffff" stroke-width="0.5"/>
-        <circle cx="0" cy="0" r="0.8" fill="#94a3b8"/>
-        <!-- Wire connection line curving away -->
-        <path d="M 0 0 Q ${i % 2 === 0 ? -12 : 12} ${pos.y < pt.cy ? -15 : 15} ${i % 2 === 0 ? -24 : 24} ${pos.y < pt.cy ? -30 : 30}" stroke="rgba(71,85,105,0.7)" stroke-width="0.8" fill="none" stroke-linecap="round" stroke-dasharray="0.5 1" />
-        <!-- Channel Text Tag -->
-        <text x="0" y="11" text-anchor="middle" fill="#818cf8" font-size="5" font-weight="900" font-family="Inter,sans-serif">${pos.ch}${i % 2 === 0 ? '1' : '2'}</text>
-      </g>`;
+
+  positions.forEach((pos)=>{
+    html+=`<circle cx="${pos.x}" cy="${pos.y}" r="2.8" fill="#6366f1" stroke="#fff" stroke-width="1.1" />`;
   });
-  
+
   svg.innerHTML=html;
 }
 
@@ -697,7 +760,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('vtab-front').addEventListener('click',()=>switchBodyView('front'));
   document.getElementById('vtab-back').addEventListener('click',()=>switchBodyView('back'));
   document.getElementById('vtab-lower').addEventListener('click',()=>switchBodyView('lower'));
-  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>go(6));
+  document.getElementById('bodymap-continue-btn').addEventListener('click',()=>{
+    if (!selectedPart) {
+      alert('Please select a body part before continuing.');
+      return;
+    }
+    go(6);
+  });
 
   // Size buttons
   document.querySelectorAll('.size-btn').forEach(b=>{
