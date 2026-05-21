@@ -8,12 +8,12 @@ const sizeLabels=['Small','Medium','Large'];
 const quotes=["Every step forward is a step toward healing.","Your strength is greater than any pain.","Recovery begins with a single step.","Healing is not linear, but every effort counts.","Breathe. Believe. Begin."];
 
 const profiles=[
-  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://randomuser.me/api/portraits/men/32.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10'},
-  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://randomuser.me/api/portraits/women/44.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10'},
-  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://randomuser.me/api/portraits/men/86.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10'},
-  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://randomuser.me/api/portraits/women/65.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10'},
-  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://randomuser.me/api/portraits/men/75.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10'},
-  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://randomuser.me/api/portraits/women/21.jpg',sessions:0,lastArea:'—',lastInt:'—'}
+  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://randomuser.me/api/portraits/men/32.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10',history:[{area:'Lower Back',intensity:6,size:'Medium',duration:15,date:'2026-05-20'},{area:'Left Knee',intensity:4,size:'Small',duration:10,date:'2026-05-15'}]},
+  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://randomuser.me/api/portraits/women/44.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10',history:[{area:'Right Knee',intensity:4,size:'Small',duration:10,date:'2026-05-18'}]},
+  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://randomuser.me/api/portraits/men/86.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10',history:[{area:'Left Shoulder',intensity:7,size:'Large',duration:20,date:'2026-05-10'}]},
+  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://randomuser.me/api/portraits/women/65.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10',history:[{area:'Neck',intensity:3,size:'Small',duration:5,date:'2026-05-12'}]},
+  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://randomuser.me/api/portraits/men/75.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10',history:[{area:'Right Hip',intensity:5,size:'Medium',duration:15,date:'2026-05-11'}]},
+  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://randomuser.me/api/portraits/women/21.jpg',sessions:0,lastArea:'—',lastInt:'—',history:[]}
 ];
 
 function getTimerMinutes(i){if(i<=2)return 5;if(i<=4)return 10;if(i<=6)return 15;if(i<=8)return 20;return 25}
@@ -192,6 +192,10 @@ function goToScreen(screenId){
   target.classList.add('active');
   // Update currentScreen to the index (for consistent state)
   currentScreen = Array.from(screens).indexOf(target);
+  // Attach event for view all sessions if on s2
+  if(screenId==='s2') {
+    attachSessionModalEvents();
+  }
 }
 
 function viewPreviousSession(){
@@ -283,6 +287,15 @@ function switchBodyView(v){
   if (viewToggle) {
     viewToggle.style.display = 'flex'; 
     viewToggle.classList.remove('hidden');
+    // Hide lower tab in front/back, show in lower
+    const lowerTab = document.getElementById('vtab-lower');
+    if (lowerTab) {
+      if (v === 'front' || v === 'back') {
+        lowerTab.style.display = 'none';
+      } else {
+        lowerTab.style.display = '';
+      }
+    }
   }
 
   // 4. Cycle and update active tab styling
@@ -335,11 +348,15 @@ function selectZone(zoneEl){
 
   updateSizeBtns();
 
-  // CRITICAL: Ensure view switching tabs never vanish on selection
+  // Always keep view switching tabs visible and enabled
   const viewToggle = document.querySelector('.view-toggle');
   if (viewToggle) {
     viewToggle.style.display = 'flex';
     viewToggle.classList.remove('hidden');
+    viewToggle.querySelectorAll('.vtab').forEach(tab => {
+      tab.style.pointerEvents = 'auto';
+      tab.style.opacity = '1';
+    });
   }
 }
 function updatePainRing(){
@@ -391,6 +408,13 @@ function setupTimerScreen(){
   totalTimerSeconds=mins*60;timerSeconds=totalTimerSeconds;
   document.getElementById('timer-desc').textContent=`${mins}-min session • ${painLabels[painLevel].toLowerCase()}`;
   document.getElementById('electrode-area-label').textContent=selectedPart||'—';
+  // Set correct tab active for timer view switcher
+  if(document.querySelector('.timer-view-toggle')) {
+    document.querySelectorAll('.timer-view-toggle .vtab').forEach(tab=>{
+      tab.classList.remove('active');
+      if(tab.dataset.view===currentView) tab.classList.add('active');
+    });
+  }
   renderElectrodeView();
 }
 
@@ -406,8 +430,10 @@ function renderElectrodeView(){
   const isMale=activeProfile.gender==='male';
   const outline=isMale?maleOutline:femaleOutline;
   
-  // Center SVG view precisely on the coordinate point
-  const sz=120; // Tight zoom window
+  // Center SVG view with more zoom for small parts
+  let sz = 120;
+  if(['Left Wrist','Right Wrist','Left Elbow','Right Elbow','Left Knee','Right Knee','Left Foot','Right Foot'].includes(selectedPart)) sz = 80;
+  if(['Neck'].includes(selectedPart)) sz = 70;
   svg.setAttribute('viewBox',`${pt.cx-sz/2} ${pt.cy-sz/2} ${sz} ${sz}`);
   
   let html = outline;
@@ -416,32 +442,51 @@ function renderElectrodeView(){
   const rSize = getRingRadius(selectedPart,painAreaSize);
   html+=`<circle cx="${pt.cx}" cy="${pt.cy}" r="${rSize}" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.6)" stroke-width="1.5" stroke-dasharray="3 2"/>`;
   
-  // Smart On-Body Electrode Mapping
-  const tinyParts = ['Neck','Left Elbow','Right Elbow','Left Wrist','Right Wrist','Left Foot','Right Foot'];
-  const narrowParts = ['Left Arm','Right Arm','Left Calf','Right Calf','Left Thigh','Right Thigh'];
-  const isNarrow = tinyParts.includes(selectedPart) || narrowParts.includes(selectedPart);
-
+  // Improved On-Body Electrode Mapping (realistic pairs)
   let positions = [];
-  if (tinyParts.includes(selectedPart)) {
+  // Shoulder, Arm, Thigh, Calf: vertical pair on muscle
+  if(['Left Shoulder','Right Shoulder','Left Thigh','Right Thigh','Left Calf','Right Calf'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx, y: pt.cy - 12, ch: 'A', rot: 0},
-      {x: pt.cx, y: pt.cy - 4, ch: 'A', rot: 0},
-      {x: pt.cx, y: pt.cy + 4, ch: 'B', rot: 0},
-      {x: pt.cx, y: pt.cy + 12, ch: 'B', rot: 0}
+      {x: pt.cx-8, y: pt.cy-16, ch:'A', rot:-10},
+      {x: pt.cx+8, y: pt.cy-8, ch:'A', rot:10},
+      {x: pt.cx-8, y: pt.cy+8, ch:'B', rot:-10},
+      {x: pt.cx+8, y: pt.cy+16, ch:'B', rot:10}
     ];
-  } else if (narrowParts.includes(selectedPart)) {
+  } else if(['Left Arm','Right Arm'].includes(selectedPart)) {
     positions = [
-      {x: pt.cx, y: pt.cy - 16, ch: 'A', rot: 0},
-      {x: pt.cx, y: pt.cy - 6, ch: 'A', rot: 0},
-      {x: pt.cx, y: pt.cy + 6, ch: 'B', rot: 0},
-      {x: pt.cx, y: pt.cy + 16, ch: 'B', rot: 0}
+      {x: pt.cx-10, y: pt.cy-12, ch:'A', rot:-20},
+      {x: pt.cx+10, y: pt.cy-2, ch:'A', rot:20},
+      {x: pt.cx-10, y: pt.cy+2, ch:'B', rot:-20},
+      {x: pt.cx+10, y: pt.cy+12, ch:'B', rot:20}
+    ];
+  } else if(['Left Knee','Right Knee'].includes(selectedPart)) {
+    positions = [
+      {x: pt.cx-7, y: pt.cy-10, ch:'A', rot:-10},
+      {x: pt.cx+7, y: pt.cy-10, ch:'A', rot:10},
+      {x: pt.cx-7, y: pt.cy+10, ch:'B', rot:-10},
+      {x: pt.cx+7, y: pt.cy+10, ch:'B', rot:10}
+    ];
+  } else if(['Left Foot','Right Foot'].includes(selectedPart)) {
+    positions = [
+      {x: pt.cx-6, y: pt.cy-6, ch:'A', rot:-5},
+      {x: pt.cx+6, y: pt.cy-6, ch:'A', rot:5},
+      {x: pt.cx-6, y: pt.cy+6, ch:'B', rot:-5},
+      {x: pt.cx+6, y: pt.cy+6, ch:'B', rot:5}
+    ];
+  } else if(['Neck','Abdomen','Upper Back','Lower Back'].includes(selectedPart)) {
+    positions = [
+      {x: pt.cx-12, y: pt.cy, ch:'A', rot:0},
+      {x: pt.cx+12, y: pt.cy, ch:'A', rot:0},
+      {x: pt.cx-12, y: pt.cy+18, ch:'B', rot:0},
+      {x: pt.cx+12, y: pt.cy+18, ch:'B', rot:0}
     ];
   } else {
+    // Default: cross pattern
     positions = [
-      {x: pt.cx - 9, y: pt.cy - 12, ch: 'A', rot: -15},
-      {x: pt.cx + 9, y: pt.cy - 12, ch: 'A', rot: 15},
-      {x: pt.cx - 9, y: pt.cy + 12, ch: 'B', rot: -15},
-      {x: pt.cx + 9, y: pt.cy + 12, ch: 'B', rot: 15}
+      {x: pt.cx-9, y: pt.cy-12, ch: 'A', rot: -15},
+      {x: pt.cx+9, y: pt.cy-12, ch: 'A', rot: 15},
+      {x: pt.cx-9, y: pt.cy+12, ch: 'B', rot: -15},
+      {x: pt.cx+9, y: pt.cy+12, ch: 'B', rot: 15}
     ];
   }
   
@@ -472,10 +517,18 @@ function startTimer(){
   timerRunning=true;document.getElementById('bpause').textContent='⏸';
   updateTimerDisplay();
   // Vibration pattern based on pain level
-  const vibPattern = painLevel <= 3 ? [100, 200] : painLevel <= 6 ? [150, 150] : [200, 100];
+  const vibPattern = painLevel <= 3 ? [80, 220] : painLevel <= 6 ? [150, 200] : [250, 150];
+  const breakInterval = painLevel <= 3 ? 6 : painLevel <= 6 ? 5 : 4; // shorter breaks for higher pain
+  let breakPhase = false;
   timerInterval=setInterval(()=>{
-    if(!timerRunning)return;timerSeconds--;updateTimerDisplay();
-    if(timerSeconds%3===0 && navigator.vibrate) navigator.vibrate(vibPattern);
+    if(!timerRunning)return;
+    // Vibration on break phase
+    if(timerSeconds>0 && timerSeconds%breakInterval===0 && navigator.vibrate) {
+      breakPhase = !breakPhase;
+      if(breakPhase) navigator.vibrate(vibPattern);
+    }
+    timerSeconds--;
+    updateTimerDisplay();
     if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false;
       document.getElementById('ttime').textContent='00:00';
       document.getElementById('bpause').textContent='✅';
@@ -539,6 +592,69 @@ function setupSwipe(){
 
 /* ===== Init ===== */
 document.addEventListener('DOMContentLoaded',()=>{
+    // Session history modal logic
+    function showSessionHistoryModal() {
+      if(!activeProfile) return;
+      const modal = document.getElementById('session-history-modal');
+      const list = document.getElementById('session-history-list');
+      list.innerHTML = '';
+      if(activeProfile.history && activeProfile.history.length) {
+        activeProfile.history.slice().reverse().forEach((sess, idx) => {
+          const row = document.createElement('div');
+          row.className = 'session-history-row';
+          row.style.cursor = 'pointer';
+          row.innerHTML = `<div><b>${sess.area}</b> <span style="color:#6366f1;font-size:0.9em;">${sess.date}</span></div><div>Intensity: <b>${sess.intensity}</b> | Size: <b>${sess.size}</b> | Duration: <b>${sess.duration} min</b></div>`;
+          row.addEventListener('click', () => {
+            selectedPart = sess.area;
+            painLevel = sess.intensity;
+            painAreaSize = sizeLabels.indexOf(sess.size) + 1;
+            document.getElementById('sa').textContent = selectedPart;
+            document.getElementById('ss').textContent = sizeLabels[painAreaSize-1];
+            document.getElementById('si').textContent = painLevel + ' / 10';
+            document.getElementById('sd').textContent = getTimerMinutes(painLevel) + ' min';
+            modal.classList.add('hidden');
+            go(8);
+            setTimeout(()=>{
+              setupTimerScreen();
+              startTimer();
+            }, 100);
+          });
+          list.appendChild(row);
+        });
+      } else {
+        list.innerHTML = '<div style="color:#888;padding:16px;">No session history found.</div>';
+      }
+      modal.classList.remove('hidden');
+    }
+
+    document.getElementById('view-all-sessions-btn')?.addEventListener('click',showSessionHistoryModal);
+    document.getElementById('close-session-history')?.addEventListener('click',()=>{
+      document.getElementById('session-history-modal').classList.add('hidden');
+    });
+    // Save session to history when session ends (idx==0 from timer screen)
+    if(currentScreen===8 && idx===0 && activeProfile) {
+      if(!activeProfile.history) activeProfile.history = [];
+      activeProfile.history.push({
+        area: selectedPart,
+        intensity: painLevel,
+        size: sizeLabels[painAreaSize-1],
+        duration: getTimerMinutes(painLevel),
+        date: new Date().toISOString().slice(0,10)
+      });
+      activeProfile.lastArea = selectedPart;
+      activeProfile.lastInt = painLevel + '/10';
+    }
+  // Attach modal event listeners on DOMContentLoaded for robustness
+  function attachSessionModalEvents() {
+    const btn = document.getElementById('view-all-sessions-btn');
+    if(btn) btn.onclick = showSessionHistoryModal;
+    const closeBtn = document.getElementById('close-session-history');
+    if(closeBtn) closeBtn.onclick = ()=>{
+      document.getElementById('session-history-modal').classList.add('hidden');
+    };
+  }
+
+  attachSessionModalEvents();
   document.getElementById('tprog').style.strokeDasharray=CIRCUMFERENCE;
   document.getElementById('tprog').style.strokeDashoffset=0;
   renderProfiles();
@@ -551,7 +667,26 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('pd-history')?.addEventListener('click',viewPreviousSession);
 
   // Previous session detail screen
-  document.getElementById('ps-continue-btn')?.addEventListener('click',()=>{painLevel=parseInt(document.getElementById('ps-intensity').textContent)||0;go(5)});
+  document.getElementById('ps-continue-btn')?.addEventListener('click',()=>{
+    // Get previous session area and intensity
+    const area = document.getElementById('ps-area').textContent;
+    const intensityStr = document.getElementById('ps-intensity').textContent;
+    if(area && area !== '—' && intensityStr && intensityStr !== '—') {
+      selectedPart = area;
+      painLevel = parseInt(intensityStr) || 0;
+      // Update summary screen fields
+      document.getElementById('sa').textContent = selectedPart;
+      document.getElementById('ss').textContent = sizeLabels[painAreaSize-1];
+      document.getElementById('si').textContent = painLevel + ' / 10';
+      document.getElementById('sd').textContent = getTimerMinutes(painLevel) + ' min';
+      // Go directly to timer screen (screen 7, index 7)
+      go(7);
+      setTimeout(()=>{
+        setupTimerScreen();
+        startTimer();
+      }, 100);
+    }
+  });
   document.getElementById('ps-new-session-btn')?.addEventListener('click',()=>{go(4)});
   document.getElementById('ps-back-btn')?.addEventListener('click',()=>go(2));
 
