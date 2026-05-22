@@ -645,11 +645,11 @@ function resetApp(){
 /* ===== Swipe ===== */
 function setupSwipe(){
   let sx=0,sy=0;const app=document.getElementById('app');
-  app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY},{passive:true});
+  app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY},{passive:true});
   app.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].screenX-sx,dy=Math.abs(e.changedTouches[0].screenY-sy);
-    // Modified back nav map supporting all screens s1-s7 back transitions
-    if(dx>80&&dy<100){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
+    const dx=e.changedTouches[0].clientX-sx,dy=Math.abs(e.changedTouches[0].clientY-sy);
+    // Back nav map supporting all screens - swipe right to go back
+    if(dx>50&&dy<80){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
   },{passive:true});
 }
 
