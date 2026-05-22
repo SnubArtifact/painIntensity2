@@ -92,7 +92,9 @@
             </svg>
           </div>
         </div>
-        <div class="swipe-hint"><span>Swipe right to go back</span></div>
+        <div class="continue-bar" style="margin-top: 12px;">
+          <div class="continue-btn" id="s2-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div>
+        </div>
               <div style="margin:18px 0 0 0;text-align:right;">
                 <button class="view-all-btn" id="view-all-sessions-btn" style="background:none;border:none;color:#6366f1;font-weight:600;cursor:pointer;">View All Sessions</button>
               </div>
@@ -144,6 +146,7 @@
           <div class="prec-item"><span class="prec-icon"></span><span>5. Use Emergency Stop if discomfort occurs</span></div>
         </div>
         <div class="continue-bar"><div class="continue-btn" id="prec-continue"><span>I Understand, Continue</span></div></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s3-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
       </div>
     </section>
 
@@ -155,7 +158,7 @@
           <div class="vtab" id="vtab-back" data-view="back">Back</div>
           
         </div>
-        <div class="hdr"><h2>Select Pain Area</h2><p>Tap on the body to mark your pain</p></div>
+        <div class="hdr" id="bodymap-header"><h2>Select Pain Area</h2><p>Tap on the body to mark your pain</p></div>
         <div class="bodymap-layout">
           <div class="bodymap-container">
             <div class="bodymap-view" id="bodymap-front"><svg viewBox="0 0 200 420" class="body-svg" id="body-svg-front"></svg></div>
@@ -177,7 +180,7 @@
         </div>
 
         <div class="continue-bar hidden" id="bodymap-continue"><div class="continue-btn" id="bodymap-continue-btn"><span>Continue</span></div></div>
-        <div class="swipe-hint"><span>Swipe right to go back</span></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s4-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
       </div>
     </section>
 
@@ -190,7 +193,7 @@
           <div class="sldlbls"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
         </div>
         <div class="continue-bar iz"><div class="continue-btn" id="intensity-continue-btn"><span>Continue</span></div></div>
-        <div class="swipe-hint iz"><span>Swipe right to go back</span></div>
+        <div class="continue-bar iz" style="margin-top: 12px;"><div class="continue-btn" id="s5-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
       </div>
     </section>
 
@@ -210,7 +213,9 @@
         <div class="continue-bar">
           <div class="continue-btn start-session-btn" id="summary-continue-btn"><span>Start Session</span></div>
         </div>
-        <div class="swipe-hint"><span>Swipe right to go back</span></div>
+        <div class="continue-bar" style="margin-top: 12px;">
+          <div class="continue-btn" id="s6-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div>
+        </div>
       </div>
     </section>
 
@@ -248,6 +253,7 @@
         <div class="tctrl"><div class="btn icon" id="bpause">⏸</div><div class="btn icon" id="breset">🔄</div></div>
         <div class="btn estop" id="btn-estop"><span>EMERGENCY STOP</span></div>
         <div class="continue-bar hidden" id="timer-done-bar"><div class="continue-btn" id="timer-done-btn"><span>Done, Return to Profiles</span></div></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s8-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
       </div>
     </section>
   </div>

@@ -3,6 +3,7 @@ function attachTimerScreenEvents() {
   document.getElementById('breset')?.addEventListener('click',rstTimer);
   document.getElementById('btn-estop')?.addEventListener('click',emergencyStop);
   document.getElementById('timer-done-btn')?.addEventListener('click',()=>{resetApp();go(0)});
+  document.getElementById('s8-back-btn')?.addEventListener('click',()=>go(7));
 }
 function attachIntensityScreenEvents() {
   document.getElementById('sld')?.addEventListener('input',e=>updInt(e.target.value));
@@ -22,6 +23,15 @@ function attachBodyMapEvents() {
   document.querySelectorAll('.size-btn').forEach(b=>{
     b.onclick = (e)=>{e.stopPropagation();painAreaSize=parseInt(b.dataset.size);updateSizeBtns();updatePainRing()};
   });
+  // Show header when on body map screen
+  const header = document.getElementById('bodymap-header');
+  if (header) {
+    if (selectedPart) {
+      header.classList.add('hidden');
+    } else {
+      header.classList.remove('hidden');
+    }
+  }
 }
 /* ===== State ===== */
 let currentScreen=0, selectedPart=null, painLevel=0, painAreaSize=1;
@@ -418,6 +428,8 @@ function selectZone(zoneEl){
   document.getElementById('zone-name').textContent = selectedPart;
   document.getElementById('selection-controls').classList.remove('hidden');
   document.getElementById('bodymap-continue').classList.remove('hidden');
+  // Hide the header instructions
+  document.getElementById('bodymap-header').classList.add('hidden');
 
   updateSizeBtns();
 
@@ -768,6 +780,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // Precautions
   document.getElementById('prec-continue').addEventListener('click',()=>go(5));
+  document.getElementById('s3-back-btn').addEventListener('click',()=>go(2));
+
+  // Back buttons
+  document.getElementById('s2-back-btn')?.addEventListener('click',()=>go(1));
+  document.getElementById('s4-back-btn')?.addEventListener('click',()=>go(3));
+  document.getElementById('s5-back-btn')?.addEventListener('click',()=>go(4));
+  document.getElementById('s6-back-btn')?.addEventListener('click',()=>go(5));
 
   // Body map
   document.getElementById('vtab-front').addEventListener('click',()=>switchBodyView('front'));
@@ -809,7 +828,8 @@ document.getElementById('summary-continue-btn')
   document.getElementById('btn-estop').addEventListener('click',emergencyStop);
   document.getElementById('timer-done-btn').addEventListener('click',()=>{resetApp();go(0)});
 
-  setupSwipe();
+  // Swipe functionality disabled - using back buttons instead
+  // setupSwipe();
   
   // Set initial slider fill
   updInt(0);
