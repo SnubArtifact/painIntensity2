@@ -645,11 +645,24 @@ function resetApp(){
 /* ===== Swipe ===== */
 function setupSwipe(){
   let sx=0,sy=0;const app=document.getElementById('app');
-  app.addEventListener('touchstart',e=>{sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY},{passive:true});
+  app.addEventListener('touchstart',e=>{
+    sx=e.changedTouches[0].clientX;
+    sy=e.changedTouches[0].clientY;
+  },{passive:true});
   app.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-sx,dy=Math.abs(e.changedTouches[0].clientY-sy);
+    const ex=e.changedTouches[0].clientX;
+    const ey=e.changedTouches[0].clientY;
+    const dx=ex-sx;
+    const dy=Math.abs(ey-sy);
+    console.log('Swipe detected: dx='+dx+', dy='+dy+', currentScreen='+currentScreen);
     // Back nav map supporting all screens - swipe right to go back
-    if(dx>50&&dy<80){const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7};if(bk[currentScreen]!==undefined)go(bk[currentScreen])}
+    if(dx>40&&dy<100){
+      const bk={1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7};
+      if(bk[currentScreen]!==undefined){
+        console.log('Going back from screen '+currentScreen+' to screen '+bk[currentScreen]);
+        go(bk[currentScreen]);
+      }
+    }
   },{passive:true});
 }
 
