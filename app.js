@@ -782,11 +782,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('prec-continue').addEventListener('click',()=>go(5));
   document.getElementById('s3-back-btn').addEventListener('click',()=>go(2));
 
-  // Back buttons
+  // Back buttons (accounting for s2b screen shift)
   document.getElementById('s2-back-btn')?.addEventListener('click',()=>go(1));
-  document.getElementById('s4-back-btn')?.addEventListener('click',()=>go(3));
-  document.getElementById('s5-back-btn')?.addEventListener('click',()=>go(4));
-  document.getElementById('s6-back-btn')?.addEventListener('click',()=>go(5));
+  document.getElementById('s4-back-btn')?.addEventListener('click',()=>go(4));  // s4 -> s3
+  document.getElementById('s5-back-btn')?.addEventListener('click',()=>go(5));  // s5 -> s4
+  document.getElementById('s6-back-btn')?.addEventListener('click',()=>go(6));  // s6 -> s5
 
   // Body map
   document.getElementById('vtab-front').addEventListener('click',()=>switchBodyView('front'));
