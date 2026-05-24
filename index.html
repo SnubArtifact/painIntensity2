@@ -30,6 +30,7 @@
           <div class="intro-system-badge">CLINICAL THERAPY SYSTEM</div>
           <h1 class="intro-title">Neuro<span class="intro-accent">Sync</span></h1>
           <p class="intro-tagline">Advanced Pain Management &amp; Intelligent Recovery Tracking</p>
+          <p style="color:#94a3b8;font-size:.95rem;line-height:1.6;margin-top:8px;max-width:380px;">NeuroSync is a clinical-grade pain management system that guides you through personalized TENS (Transcutaneous Electrical Nerve Stimulation) therapy sessions. Select your pain location, rate your intensity level, and let our intelligent system guide electrode placement for optimal therapeutic results.</p>
         </div>
         <div class="intro-features glass">
           <div class="feat-item">
@@ -46,13 +47,7 @@
               <p>Dynamic TENS pad clinical positioning</p>
             </div>
           </div>
-          <div class="feat-item">
-            <span class="feat-icon">📈</span>
-            <div class="feat-text">
-              <h4>Therapeutic Analytics</h4>
-              <p>Intensity grading and session recovery timers</p>
-            </div>
-          </div>
+          
         </div>
         <div class="continue-bar" style="margin-top: 16px;">
           <div class="continue-btn begin-therapy-btn" id="intro-start-btn">
@@ -93,7 +88,7 @@
           </div>
         </div>
         <div class="continue-bar" style="margin-top: 12px;">
-          <div class="continue-btn" id="s2-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div>
+          <div class="continue-btn" id="s2-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Go Back</span></div>
         </div>
               <div style="margin:18px 0 0 0;text-align:right;">
                 <button class="view-all-btn" id="view-all-sessions-btn" style="background:none;border:none;color:#6366f1;font-weight:600;cursor:pointer;">View All Sessions</button>
@@ -103,7 +98,7 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h3>Session History</h3>
-                    <span class="modal-close" id="close-session-history" style="cursor:pointer;font-size:1.5em;">&times;</span>
+                    <span class="modal-close" id="close-session-history" style="cursor:pointer;font-size:1.5em;color: crimson;">&times;</span>
                   </div>
                   <div class="modal-body" id="session-history-list">
                     <!-- Session list will be rendered here -->
@@ -130,7 +125,7 @@
         <div class="continue-bar">
           <div class="continue-btn" id="ps-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)"><span>Back to Welcome</span></div>
         </div>
-        <div class="swipe-hint"><span>Swipe right to go back</span></div>
+       
       </div>
     </section>
 
@@ -139,14 +134,14 @@
       <div class="sc">
         <div class="hdr"><span class="badge">Before You Begin</span><h2>Safety Precautions</h2></div>
         <div class="precaution-list" id="precaution-list">
-          <div class="prec-item"><span class="prec-icon"></span><span>1. Ensure treatment area is clean and dry</span></div>
-          <div class="prec-item"><span class="prec-icon"></span><span>2. Do not use on broken or irritated skin</span></div>
-          <div class="prec-item"><span class="prec-icon"></span><span>3. Remove metallic jewelry near the area</span></div>
-          <div class="prec-item"><span class="prec-icon"></span><span>4. Consult physician if you have a pacemaker</span></div>
-          <div class="prec-item"><span class="prec-icon"></span><span>5. Use Emergency Stop if discomfort occurs</span></div>
+          <div class="prec-item"><span class="prec-icon"></span><span>1. Avoid use with pacemakers or heart conditions</span></div>
+          <div class="prec-item"><span class="prec-icon"></span><span>2. Avoid use during pregnancy unless medically advised</span></div>
+          <div class="prec-item"><span class="prec-icon"></span><span>3. Do not place pads across the chest or front of the neck</span></div>
+          <div class="prec-item"><span class="prec-icon"></span><span>4. Do not use on broken or irritated skin</span></div>
+          <div class="prec-item"><span class="prec-icon"></span><span>5. Use emergency stop in case of any discomfort</span></div>
         </div>
         <div class="continue-bar"><div class="continue-btn" id="prec-continue"><span>I Understand, Continue</span></div></div>
-        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s3-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s3-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Go Back</span></div></div>
       </div>
     </section>
 
@@ -180,7 +175,7 @@
         </div>
 
         <div class="continue-bar hidden" id="bodymap-continue"><div class="continue-btn" id="bodymap-continue-btn"><span>Continue</span></div></div>
-        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s4-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s4-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Go Back</span></div></div>
       </div>
     </section>
 
@@ -193,7 +188,7 @@
           <div class="sldlbls"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
         </div>
         <div class="continue-bar iz"><div class="continue-btn" id="intensity-continue-btn"><span>Continue</span></div></div>
-        <div class="continue-bar iz" style="margin-top: 12px;"><div class="continue-btn" id="s5-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
+        <div class="continue-bar iz" style="margin-top: 12px;"><div class="continue-btn" id="s5-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span> Go Back</span></div></div>
       </div>
     </section>
 
@@ -202,19 +197,26 @@
       <div class="sc">
         <div class="hdr"><span class="badge">Step 3 / 3</span><h2>Summary</h2></div>
         <div class="sumcard glass">
-          <div class="sumrow"><div class="sumico"></div><div><div class="sumlbl">Pain Area</div><div class="sumval" id="sa">—</div></div></div>
+          <div class="sumrow"><div class="sumico">📍</div><div><div class="sumlbl">Pain Area</div><div class="sumval" id="sa">—</div></div></div>
           <hr class="sumdiv" />
-          <div class="sumrow"><div class="sumico"></div><div><div class="sumlbl">Area Size</div><div class="sumval" id="ss">—</div></div></div>
+          <div class="sumrow"><div class="sumico">📏</div><div><div class="sumlbl">Area Size</div><div class="sumval" id="ss">—</div></div></div>
           <hr class="sumdiv" />
-          <div class="sumrow"><div class="sumico"></div><div><div class="sumlbl">Pain Intensity</div><div class="sumval" id="si">—</div></div></div>
+          <div class="sumrow"><div class="sumico">📊</div><div><div class="sumlbl">Pain Intensity</div><div class="sumval" id="si">—</div></div></div>
           <hr class="sumdiv" />
           <div class="sumrow"><div class="sumico">⏱</div><div><div class="sumlbl">Session Duration</div><div class="sumval" id="sd">—</div></div></div>
+        </div>
+        <div class="notice-box" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:12px;padding:14px 16px;margin:16px 0;display:flex;align-items:center;gap:12px;font-size:.9rem;color:#e2e8f0;">
+          <span style="font-size:1.4rem;">⚡</span>
+          <div>
+            <div style="font-weight:600;margin-bottom:4px;">Before You Start</div>
+            <div style="color:#94a3b8;font-size:.85rem;">Place the electrode pads on the <strong id="notice-area">—</strong> area before proceeding</div>
+          </div>
         </div>
         <div class="continue-bar">
           <div class="continue-btn start-session-btn" id="summary-continue-btn"><span>Start Session</span></div>
         </div>
         <div class="continue-bar" style="margin-top: 12px;">
-          <div class="continue-btn" id="s6-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div>
+          <div class="continue-btn" id="s6-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Go Back</span></div>
         </div>
       </div>
     </section>
@@ -253,7 +255,7 @@
         <div class="tctrl"><div class="btn icon" id="bpause">⏸</div><div class="btn icon" id="breset">🔄</div></div>
         <div class="btn estop" id="btn-estop"><span>EMERGENCY STOP</span></div>
         <div class="continue-bar hidden" id="timer-done-bar"><div class="continue-btn" id="timer-done-btn"><span>Done, Return to Profiles</span></div></div>
-        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s8-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Back</span></div></div>
+        <div class="continue-bar" style="margin-top: 12px;"><div class="continue-btn" id="s8-back-btn" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"><span>Go Back</span></div></div>
       </div>
     </section>
   </div>

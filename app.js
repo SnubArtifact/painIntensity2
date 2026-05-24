@@ -1,9 +1,15 @@
 function attachTimerScreenEvents() {
-  document.getElementById('bpause')?.addEventListener('click',togTimer);
-  document.getElementById('breset')?.addEventListener('click',rstTimer);
-  document.getElementById('btn-estop')?.addEventListener('click',emergencyStop);
-  document.getElementById('timer-done-btn')?.addEventListener('click',()=>{resetApp();go(0)});
-  document.getElementById('s8-back-btn')?.addEventListener('click',()=>go(7));
+  const pauseBtn = document.getElementById('bpause');
+  const resetBtn = document.getElementById('breset');
+  const estopBtn = document.getElementById('btn-estop');
+  const doneBtn = document.getElementById('timer-done-btn');
+  const backBtn = document.getElementById('s8-back-btn');
+  
+  if (pauseBtn) pauseBtn.onclick = togTimer;
+  if (resetBtn) resetBtn.onclick = rstTimer;
+  if (estopBtn) estopBtn.onclick = emergencyStop;
+  if (doneBtn) doneBtn.onclick = ()=>{resetApp();go(0)};
+  if (backBtn) backBtn.onclick = ()=>go(7);
 }
 function attachIntensityScreenEvents() {
   document.getElementById('sld')?.addEventListener('input',e=>updInt(e.target.value));
@@ -43,12 +49,12 @@ const sizeLabels=['Small','Medium','Large'];
 const quotes=["Every step forward is a step toward healing.","Your strength is greater than any pain.","Recovery begins with a single step.","Healing is not linear, but every effort counts.","Breathe. Believe. Begin."];
 
 const profiles=[
-  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://thumbs.dreamstime.com/b/indian-man-young-good-looking-people-smiling-standing-isolated-white-background-31400054.jpg?w=576',sessions:12,lastArea:'Lower Back',lastInt:'6/10',history:[]},
-  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&w=256&h=256&fit=facearea',sessions:8,lastArea:'Right Knee',lastInt:'4/10',history:[]},
-  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://thumbs.dreamstime.com/b/smart-smiling-middle-aged-indian-business-man-26978835.jpg?w=576',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10',history:[]},
-  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://bridgeindia.org.uk/wp-content/uploads/2019/05/Kamini-Gupta.xa691a87f.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10',history:[]},
-  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://www.discoverwalks.com/blog/wp-content/uploads/2020/10/800px-prime_minister_shri_narendra_modi_in_new_delhi_on_august_08_2019_cropped.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10',history:[]},
-  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&w=256&h=256&fit=facearea',sessions:0,lastArea:'—',lastInt:'—',history:[]}
+  {id:1,name:'Ishaan Kapoor',age:45,gender:'male',photo:'https://i.pinimg.com/736x/60/92/fc/6092fce4209efe17c9a47d260f10e797.jpg',sessions:12,lastArea:'Lower Back',lastInt:'6/10',history:[]},
+  {id:2,name:'Geetika Kapoor',age:32,gender:'female',photo:'https://i.pinimg.com/736x/80/fc/de/80fcde8e6b838aabc3d22c1280946bf1.jpg',sessions:8,lastArea:'Right Knee',lastInt:'4/10',history:[]},
+  {id:3,name:'Raj Kapoor',age:58,gender:'male',photo:'https://i.pinimg.com/1200x/39/d6/14/39d6141b1666f67ac9d2cadeb197c5dd.jpg',sessions:15,lastArea:'Left Shoulder',lastInt:'7/10',history:[]},
+  {id:4,name:'Alia Kapoor',age:41,gender:'female',photo:'https://i.pinimg.com/1200x/eb/c8/50/ebc8507209e207e6f7aa99c67b779f61.jpg',sessions:5,lastArea:'Neck',lastInt:'3/10',history:[]},
+  {id:5,name:'Tanmay Arora',age:67,gender:'male',photo:'https://i.pinimg.com/1200x/6d/0b/25/6d0b25a9fe0a66f7d9c570d3a339a24e.jpg',sessions:20,lastArea:'Right Hip',lastInt:'5/10',history:[]},
+  {id:6,name:'Janvi Arora',age:29,gender:'female',photo:'https://i.pinimg.com/736x/47/00/a2/4700a2a065a00a3e0b98b4421d4d7cc4.jpg',sessions:0,lastArea:'—',lastInt:'—',history:[]}
 ];
 
 // Generate random session history for each profile based on their session count
@@ -316,6 +322,7 @@ function go(idx){
     document.getElementById('ss').textContent=selectedPart?sizeLabels[painAreaSize-1]:'—';
     document.getElementById('si').textContent=painLevel+' / 10';
     document.getElementById('sd').textContent=getTimerMinutes(painLevel)+' min';
+    document.getElementById('notice-area').textContent=selectedPart||'—';
     // Re-attach continue button event for robustness
     const contBtn = document.getElementById('summary-continue-btn');
     if (contBtn) {
